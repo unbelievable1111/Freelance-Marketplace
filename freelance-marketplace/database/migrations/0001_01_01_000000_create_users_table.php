@@ -11,6 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // ------------------------------
+        // Таблица ролей
+        // ------------------------------
+        Schema::create('user_roles', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->timestamps();
+        });
+
+        // ------------------------------
+        // Таблица пользователей
+        // ------------------------------
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -19,14 +31,25 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+
+            // Внешний ключ на user_roles
+            $table->foreignId('user_role_id')
+                  ->constrained('user_roles')
+                  ->restrictOnDelete(); // нельзя удалить роль, если есть пользователь
         });
 
+        // ------------------------------
+        // Таблица сброса паролей
+        // ------------------------------
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
 
+        // ------------------------------
+        // Таблица сессий
+        // ------------------------------
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
@@ -42,8 +65,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
+        // Удаляем в обратном порядке, чтобы не было проблем с FK
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
+        Schema::dropIfExists('user_roles');
     }
 };
