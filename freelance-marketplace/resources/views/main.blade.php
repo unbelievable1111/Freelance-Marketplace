@@ -29,10 +29,21 @@
     </head>
     <body>
         @include('components.header')
-        <div>
-            <main>
-                @yield('content')
-            </main>
-        </div>
+        
+        @auth
+            <div class="container">
+                <h1>Hello, {{auth()->user()->name}}</h1>
+            </div>
+        @endauth
+
+        @guest
+            <div class="container">
+                <h1>Hello, guest</h1>
+            </div>
+        @endguest
+
+        <main>
+            @yield('content')
+        </main>
     </body>
 </html>
