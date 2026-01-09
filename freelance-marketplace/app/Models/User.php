@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -51,5 +52,15 @@ class User extends Authenticatable
     public function UserRole(): BelongsTo
     {
         return $this->belongsTo(UserRole::class, 'user_role_id', 'id');
+    }
+
+    public function UserAvatar(): HasOne
+    {
+        return $this->hasOne(UserAvatar::class, 'user_id', 'id');
+    }
+
+    public function getAvatarAttribute(): string
+    {
+        return $this->UserAvatar?->path ? asset('storage/avatars/' . $this->UserAvatar->path) : asset('storage/avatars/no-avatar.png');
     }
 }

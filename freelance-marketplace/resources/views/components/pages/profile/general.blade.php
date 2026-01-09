@@ -1,7 +1,36 @@
 @extends('components.pages.profile.menu')
 
 @section('profile-content')
+    
     <div class="container mt-4">
+        {{-- Form for showing and updating user's avatar --}}
+        <div class="row justify-content-center mb-4">
+            <div class="col-12 ">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-info-subtle text-center">
+                        <h5 class="mb-0 text-white">Avatar</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <!-- Current user's avatar -->
+                        <div class="d-flex justify-content-center mb-3">
+                            <img src="{{ auth()->user()->avatar }}" alt="User's avatar"  class="rounded-circle"  style="width: 200px; height: 200px; object-fit: cover;">
+                        </div>
+
+                        <!-- The form for changing the avatar -->
+                        <form action="{{ route('profile.avatar.update') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+
+                            <div class="mb-3">
+                                <input class="form-control" type="file" name="avatar" accept="image/*" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">Change Avatar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         {{-- General info --}}
         <div class="row justify-content-center mb-4">
@@ -44,7 +73,6 @@
                         <h5 class="mb-0 text-white">Change Password</h5>
                     </div>
                     <div class="card-body">
-
                         <form method="POST" action="{{ route('profile.password.update') }}">
                             @csrf
                             <div class="mb-3">
@@ -67,7 +95,7 @@
                                 <label class="form-label">Confirm new password</label>
                                 <input type="password" name="password_confirmation" class="form-control">
                             </div>
-                            <button type="submit" class="btn btn-warning">
+                            <button type="submit" class="btn btn-warning w-100">
                                 Update password
                             </button>
                         </form>

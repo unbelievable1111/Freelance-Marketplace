@@ -10,9 +10,7 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     **Seed the application's database.
-     **/
+    /** Seed the application's database. **/
     public function run(): void
     {
         $this->call(UserRoleSeeder::class);
@@ -37,5 +35,14 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
             'user_role_id' => 3,
         ]);
+
+        User::create([
+            'name' => 'alex',
+            'email' => 'alex@example.com',
+            'password' => bcrypt('password'),
+            'user_role_id' => 1,
+        ]);
+
+        $this->call(UserAvatarSeeder::class);
     }
 }

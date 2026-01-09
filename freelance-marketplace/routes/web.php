@@ -7,13 +7,15 @@ use Illuminate\Support\Facades\Route;
 
 #Auth
 Auth::routes();
-Route::middleware('auth')->group(function () {
-    Route::post('/profile/password', [ProfileController::class, 'updatePassword'])
-        ->name('profile.password.update');
-});
 
 #HomeController
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
 #ProfileController
-Route::get('/my-profile', [ProfileController::class, 'index'])->name('profile.index');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/profile/bank-accounts', [ProfileController::class, 'index'])->name('profile.bank-accounts');
+    Route::put('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+});
+
