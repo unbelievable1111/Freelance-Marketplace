@@ -44,5 +44,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(UserAvatarSeeder::class);
+        $this->call(BankAccountSeeder::class);
     }
 }

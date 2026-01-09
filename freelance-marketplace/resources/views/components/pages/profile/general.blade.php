@@ -1,7 +1,6 @@
 @extends('components.pages.profile.menu')
 
 @section('profile-content')
-    
     <div class="container mt-4">
         {{-- Form for showing and updating user's avatar --}}
         <div class="row justify-content-center mb-4">
@@ -36,7 +35,7 @@
         <div class="row justify-content-center mb-4">
             <div class="col-12">
                 <div class="card shadow-sm">
-                    <div class="card-header bg-success">
+                    <div class="card-header bg-success text-center">
                         <h5 class="mb-0 text-white">Profile Information</h5>
                     </div>
 
@@ -69,7 +68,7 @@
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="card shadow-sm border-warning">
-                    <div class="card-header bg-warning-subtle">
+                    <div class="card-header bg-warning-subtle text-center">
                         <h5 class="mb-0 text-white">Change Password</h5>
                     </div>
                     <div class="card-body">

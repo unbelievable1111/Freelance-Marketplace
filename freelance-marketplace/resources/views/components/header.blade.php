@@ -1,6 +1,5 @@
 <div class="container">
-    <header
-        class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+    <header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
         <div class="col-md-3 mb-2 mb-md-0">
             <a href="{{ route('home.index') }}" class="d-inline-flex link-body-emphasis text-decoration-none">
                 <img src="{{asset('storage/images/f.png')}}" alt="Logo" class="bi ml-3" width="50" height="32" role="img" aria-label="Bootstrap">
@@ -18,7 +17,7 @@
             @auth
                 <a href="{{ route('profile.index') }}" @class([
                     'nav-link px-2',
-                    'link-secondary' => request()->routeIs('profile.index'),
+                    'link-secondary' => request()->routeIs('profile.*'),
                 ])>
                     My profile
                 </a>

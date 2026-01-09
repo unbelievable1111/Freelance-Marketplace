@@ -12,34 +12,33 @@
                 </a>
                 <hr>
                 <ul class="nav nav-pills flex-column mb-auto">
-
                     <li class="nav-item">
-                        <a href="{{ route('profile.index') }}"
-                            class="nav-link {{ request()->routeIs('profile.index') ? 'active' : 'text-white' }}">
+                        <a href="{{ route('profile.index') }}" class="nav-link {{ request()->routeIs('profile.index') ? 'active' : 'text-white' }}">
                             General information
                         </a>
                     </li>
 
-                    {{-- <li class="nav-item">
-                    <a href="{{ route('profile.bank') }}"
-                    class="nav-link {{ request()->routeIs('profile.bank') ? 'active' : 'text-white' }}">
-                        Bank accounts
-                    </a>
-                    </li>
-
                     <li class="nav-item">
-                        <a href="{{ route('profile.transactions') }}"
-                        class="nav-link {{ request()->routeIs('profile.transactions') ? 'active' : 'text-white' }}">
-                            Transaction history
+                        <a href="{{ route('profile.bank-accounts') }}" class="nav-link {{ request()->routeIs('profile.bank-accounts') ? 'active' : 'text-white' }}">
+                            Bank accounts
                         </a>
                     </li>
 
-                    <li class="nav-item">
-                        <a href="{{ route('profile.reviews') }}"
-                        class="nav-link {{ request()->routeIs('profile.reviews') ? 'active' : 'text-white' }}">
-                            Reviews
-                        </a>
-                    </li> --}}
+                    {{-- 
+                        <li class="nav-item">
+                            <a href="{{ route('profile.transactions') }}"
+                            class="nav-link {{ request()->routeIs('profile.transactions') ? 'active' : 'text-white' }}">
+                                Transaction history
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('profile.reviews') }}"
+                            class="nav-link {{ request()->routeIs('profile.reviews') ? 'active' : 'text-white' }}">
+                                Reviews
+                            </a>
+                        </li> 
+                    --}}
                 </ul>
                 <hr>
             </div>
