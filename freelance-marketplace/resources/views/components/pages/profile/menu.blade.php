@@ -11,7 +11,7 @@
                     <span class="fs-4">My profile</span>
                 </a>
                 <hr>
-                <ul class="nav nav-pills flex-column mb-auto">
+                <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
                         <a href="{{ route('profile.index') }}" class="nav-link {{ request()->routeIs('profile.index') ? 'active' : 'text-white' }}">
                             General information

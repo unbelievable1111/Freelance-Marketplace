@@ -28,22 +28,26 @@
         <script src="{{ mix('js/app.js') }}"></script>
     </head>
     <body>
-        @include('components.header')
-        
-        @auth
-            <div class="container">
-                <h1>Hello, {{auth()->user()->name}}</h1>
-            </div>
-        @endauth
+        <div class="container">
+            @include('components.header')
+            
+            @auth
+                <div class="container">
+                    <h1>Hello, {{auth()->user()->name}}</h1>
+                </div>
+            @endauth
 
-        @guest
-            <div class="container">
-                <h1>Hello, guest</h1>
-            </div>
-        @endguest
+            @guest
+                <div class="container">
+                    <h1>Hello, guest</h1>
+                </div>
+            @endguest
 
-        <main>
-            @yield('content')
-        </main>
+            <main>
+                @yield('content')
+            </main>
+
+            @include('components.footer')
+        </div>
     </body>
 </html>
