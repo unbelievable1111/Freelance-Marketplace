@@ -57,7 +57,7 @@
 
                         <div>
                             <small class="text-muted">Balance</small>
-                            <div class="fs-5 text-success">0.00 USD</div>
+                            <div class="fs-5 text-success">{{auth()->user()->Balance->amount}} USD</div>
                         </div>
                     </div>
                 </div>

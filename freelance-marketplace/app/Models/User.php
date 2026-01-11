@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(BankAccount::class, 'user_id', 'id');
     }
+
+    public function Balance(): HasOne
+    {
+        return $this->hasOne(Balance::class, 'user_id', 'id');
+    }
 }
