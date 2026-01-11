@@ -15,7 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(UserRoleSeeder::class);
         
-        
         User::create([
             'name' => 'bob_worker',
             'email' => 'bob_worker@example.com',
@@ -47,5 +46,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UserAvatarSeeder::class);
         $this->call(BankAccountSeeder::class);
         $this->call(BalanceSeeder::class);
+        $this->call(TransactionTypeSeeder::class);
     }
 }
