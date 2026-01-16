@@ -3,6 +3,7 @@
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,3 +27,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile/bank-accounts/create', [BankAccountController::class, 'createCard'])->name('profile.bank-accounts.create-card');
 });
 
+#TransactionController
+Route::middleware('auth')->group(function () {
+    Route::get('/profile/transactions/finance-operations', [TransactionController::class, 'index'])->name('profile.transactions.finance-operations');
+    Route::get('/profile/transactions/history', [TransactionController::class, 'history'])->name('profile.transactions.history');
+    Route::post('/profile/transactions/deposit', [TransactionController::class, 'deposit'])->name('profile.transactions.deposit');
+    Route::post('/profile/transactions/withdraw', [TransactionController::class, 'withdraw'])->name('profile.transactions.withdraw');
+});

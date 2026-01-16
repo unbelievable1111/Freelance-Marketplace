@@ -18,8 +18,7 @@
                             @foreach (Auth()->user()->bankAccounts as $BankAccount)
                                 <div class="row justify-content-center mt-3  px-30">
                                     <div class="bank-card-wrapper position-relative" style="min-width: 600px">
-                                        <img src="{{ asset('storage/images/bank_card_template.png') }}" class="img-fluid"
-                                            alt="">
+                                        <img src="{{ asset('storage/images/bank_card_template.png') }}" class="img-fluid" alt="">
 
                                         {{-- Текст --}}
                                         <div

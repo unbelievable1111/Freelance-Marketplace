@@ -33,13 +33,12 @@ class BankAccountController extends Controller
     {
         $cards_count = BankAccount::where('user_id', '=', Auth::id())->count();
 
-        if ($cards_count >= 5)
-        {
+        if ($cards_count >= 5) {
             return back()->with('creation-card-failure', 'You can\'t add more than 5 cards!');
         }
         
         $validated = $request->validate([
-            'name' => ['required', 'string', 'max:64'],
+            'name' => [ 'required', 'string', 'max:64' ],
             'card_number' => [
                 'required',
                 'digits:16',

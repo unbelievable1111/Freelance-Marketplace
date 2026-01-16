@@ -76,7 +76,8 @@ class ProfileController extends Controller
 
             $user->UserAvatar->update(['path' => $filename]);
         } 
-        else {
+        else 
+        {
             UserAvatar::create([
                 'user_id' => $user->id,
                 'path' => $filename,
