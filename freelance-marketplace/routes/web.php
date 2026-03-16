@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Auth;
@@ -33,4 +34,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/transactions/history', [TransactionController::class, 'history'])->name('profile.transactions.history');
     Route::post('/profile/transactions/deposit', [TransactionController::class, 'deposit'])->name('profile.transactions.deposit');
     Route::post('/profile/transactions/withdraw', [TransactionController::class, 'withdraw'])->name('profile.transactions.withdraw');
+});
+
+#OrderController
+Route::middleware('auth')->group(function () 
+{
+    Route::get('/orders/create-order', [OrderController::class, 'createOrder'])->name('order.create-order');
+    Route::post('/orders/create-order', [OrderController::class, 'createOrder'])->name('order.create-order');
+    Route::get('/my-orders', [OrderController::class, 'showMyOrders'])->name('order.show-orders');
+    Route::get('/orders/{order}', [OrderController::class, 'showOrder'])->name('order.show-order');
+    Route::post('/orders/{order}', [OrderController::class, 'editOrder'])->name('order.edit-order');
+    Route::delete('/orders/delete-attachment/{attachment}', [OrderController::class, 'deleteAttachment'])->name('order.delete-attachment');
+    Route::post('/orders/add-attachments/{order}', [OrderController::class, 'addAttachment'])->name('order.add-attachment');
+    Route::patch('/orders/cancel-order/{order}', [OrderController::class, 'cancelOrder'])->name('order.cancel-order');
 });

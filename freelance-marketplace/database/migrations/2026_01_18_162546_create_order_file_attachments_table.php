@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_avatars', function (Blueprint $table) {
+        Schema::create('order_file_attachments', function (Blueprint $table) {
             $table->id();
-            $table->string("path")->default("no-avatar.png");
-            $table->foreignId("user_id")->constrained("users", "id")->onDelete('cascade')->unique();;
+            $table->string('stored_filename');
+            $table->string('original_filename');
+            $table->foreignId('order_id')->constrained('orders')->onDelete('cascade');
         });
     }
 
@@ -23,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_avatars');
+        Schema::dropIfExists('order_file_attachments');
     }
 };

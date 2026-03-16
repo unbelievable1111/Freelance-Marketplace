@@ -11,7 +11,11 @@
                     </div>
                     <div class="card-body text-center">
                         <div class="container">
-                            <h3><span class="text-success">{{ Auth()->user()->balance->amount }} USD</span></h3>
+                            <h3><span class="text-success">{{ Auth()->user()->balance->amount }} USD</span>
+                                @if (Auth()->user()->balance->escrowed_amount > 0)
+                                    <span class="text-warning"> ({{ Auth()->user()->balance->escrowed_amount }} USD ESCROWED)</span>
+                                @endif
+                            </h3>
                         </div>
                     </div>
                 </div>

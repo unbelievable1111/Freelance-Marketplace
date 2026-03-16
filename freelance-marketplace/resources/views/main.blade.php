@@ -31,11 +31,10 @@
         <div class="container">
             @include('components.header')
             
-            @auth
-                <div class="container">
-                    <h1>Hello, {{auth()->user()->name}}</h1>
-                </div>
-            @endauth
+            @if (session('success'))
+                <div class="alert alert-success">{{ session('success') }}</div>
+            @endif
+
 
             @guest
                 <div class="container">

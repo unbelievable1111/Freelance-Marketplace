@@ -73,4 +73,13 @@ class User extends Authenticatable
     {
         return $this->hasOne(Balance::class, 'user_id', 'id');
     }
+
+    public function ordersAsCustomer(): HasMany
+    {
+        if ($this->UserRole->name !== 'customer') {
+            throw new \Exception('User is not a customer');
+        }
+
+        return $this->hasMany(Order::class, 'customer_id', 'id');
+    }
 }

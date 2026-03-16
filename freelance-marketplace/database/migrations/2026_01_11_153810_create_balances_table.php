@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained("users", 'id')->unique();
             $table->decimal('amount', 15, 2)->default(0);
+            $table->decimal('escrowed_amount', 15, 2)->default(0);
             $table->timestamps();
         });
     }

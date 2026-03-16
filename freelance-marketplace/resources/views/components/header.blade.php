@@ -2,8 +2,7 @@
     class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
     <div class="col-md-3 mb-2 mb-md-0">
         <a href="{{ route('home.index') }}" class="d-inline-flex link-body-emphasis text-decoration-none">
-            <img src="{{ asset('storage/images/f.png') }}" alt="Logo" class="bi ml-3" width="50" height="32"
-                role="img" aria-label="Bootstrap">
+            <img src="{{ asset('storage/images/f.png') }}" alt="Logo" class="bi ml-3" width="50" height="32" role="img" aria-label="Bootstrap">
         </a>
     </div>
 
@@ -14,6 +13,24 @@
         ])>
             Home
         </a>
+
+        @auth
+            @if(auth()->user()->UserRole->name === 'customer' || auth()->user()->UserRole->name === 'admin')
+                <a href="{{ route('order.show-orders') }}" @class([
+                    'nav-link px-2',
+                    'link-secondary' => request()->routeIs('order.show-orders'),
+                ])>
+                    My orders
+                </a>
+
+                <a href="{{ route('order.create-order') }}" @class([
+                    'nav-link px-2',
+                    'link-secondary' => request()->routeIs('order.create-order'),
+                ])>
+                    Create an order
+                </a>
+            @endif
+        @endauth
 
         @auth
             <a href="{{ route('profile.index') }}" @class([
@@ -27,7 +44,6 @@
         <li><a href="#" class="nav-link px-2">Features</a></li>
         <li><a href="#" class="nav-link px-2">Pricing</a></li>
         <li><a href="#" class="nav-link px-2">FAQs</a></li>
-        <li><a href="#" class="nav-link px-2">About</a></li>
     </ul>
 
     <div class="col-md-3 text-end mr-3">

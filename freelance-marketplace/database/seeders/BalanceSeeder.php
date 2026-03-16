@@ -16,7 +16,7 @@ class BalanceSeeder extends Seeder
 
         foreach ($users as $user) 
         {
-            DB::table('balances')->insert([ 'user_id' => $user->id, 'amount' => 0, 'updated_at' => now(), 'created_at' => now() ]);
+            DB::table('balances')->insert([ 'user_id' => $user->id, 'amount' => 0, 'escrowed_amount' => 0, 'updated_at' => now(), 'created_at' => now() ]);
         }
     }
 }

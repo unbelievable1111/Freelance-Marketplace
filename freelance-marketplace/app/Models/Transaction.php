@@ -10,6 +10,7 @@ class Transaction extends Model
     protected $fillable = 
     [
         'user_id',
+        'order_id',
         'amount',
         'transaction_type_id',
         'bank_account_id',
@@ -40,5 +41,10 @@ class Transaction extends Model
     public function ReletedUser(): BelongsTo
     {
         return $this->belongsTo(User::class, "related_user_id", "id");
+    }
+
+    public function Order(): BelongsTo
+    {
+        return $this->belongsTo(Order::class, "order_id", "id");
     }
 }

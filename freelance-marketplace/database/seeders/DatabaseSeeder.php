@@ -30,10 +30,24 @@ class DatabaseSeeder extends Seeder
         ]);
 
         User::create([
+            'name' => 'john_customer',
+            'email' => 'john_customer@example.com',
+            'password' => bcrypt('password'),
+            'user_role_id' => 2,
+        ]);
+
+        User::create([
             'name' => 'alice_admin',
             'email' => 'alice_admin@example.com',
             'password' => bcrypt('password'),
             'user_role_id' => 3,
+        ]);
+
+        User::create([
+            'name' => 'escrow_service',
+            'email' => 'escrow_service@example.com',
+            'password' => bcrypt('password'),
+            'user_role_id' => 4,
         ]);
 
         User::create([
@@ -48,5 +62,10 @@ class DatabaseSeeder extends Seeder
         $this->call(BalanceSeeder::class);
         $this->call(TransactionTypeSeeder::class);
         $this->call(TransactionSeeder::class);
+        $this->call(MainOrderCategorySeeder::class);
+        $this->call(SubOrderCategorySeeder::class);
+        $this->call(OrderStatusSeeder::class);
+        $this->call(OrderFileAttachmentSeeder::class);
+        $this->call(OrderSeeder::class);
     }
 }

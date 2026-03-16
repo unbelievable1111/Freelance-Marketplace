@@ -65,7 +65,8 @@ class TransactionController extends Controller
             );
         }
 
-        try {
+        try 
+        {
             DB::transaction(function () use ($validatedData, $bankAccount) {
                 $balance = Balance::where('user_id', Auth::id())->lockForUpdate()->first();
 

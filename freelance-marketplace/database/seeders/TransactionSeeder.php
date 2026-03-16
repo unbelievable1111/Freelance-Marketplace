@@ -3,20 +3,31 @@
 namespace Database\Seeders;
 
 use App\Models\Balance;
+use App\Models\Order;
 use App\Models\TransactionType;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class TransactionSeeder extends Seeder
 {
-    private function makeTransaction(int $user_id, float $amount, String $operationName, int $related_user_id = null): void
+    public static function makeTransaction(int $user_id, float $amount, String $operationName, int $related_user_id = null, Order $order = null): void
     {
         $user = User::findOrFail($user_id);
+
+        echo "related_user_id #$related_user_id\n";
+        
         $releted_user = $related_user_id ? User::findOrFail($related_user_id) : null;
 
-        if ($operationName != 'transfer') {
+        if ($related_user_id)
+        {
+            echo "related_user_name #$releted_user->name\n";
+        }
+
+
+        if ($operationName != 'transfer' && $operationName != 'escrow' && count($user->BankAccounts) > 0){
             $bankAccount = $user->BankAccounts[0];
         } 
         else 
@@ -37,12 +48,21 @@ class TransactionSeeder extends Seeder
             $related_balance = Balance::where('user_id', $related_user_id)->lockForUpdate()->firstOrFail();
             $related_balance->increment('amount', $amount);
         }
+        elseif ($operationName === 'escrow') {
+            $balance->decrement('amount', $amount);
+            $balance->increment('escrowed_amount', $amount);
+            $related_balance = Balance::where('user_id', $related_user_id)->lockForUpdate()->firstOrFail();
+            $related_balance->increment('amount', $amount);
+        }
 
         $transaction_type_id = TransactionType::where('name', $operationName)->firstOrFail()->id;
 
+        $random_time = $order ? $order->created_at : Carbon::now()->subMinutes(rand(0, 300)); 
+        
         DB::table('transactions')->insert([
-            'user_id' => $user->id,
-            'amount' => $amount,
+            'user_id'   => $user->id,
+            'amount'    => $amount,
+            'order_id'  => $order ? $order->id : null,
             'transaction_type_id' => $transaction_type_id , 
             'bank_account_id' => $bankAccount?->id,
             'related_user_id' => $related_user_id,
@@ -50,10 +70,10 @@ class TransactionSeeder extends Seeder
             'meta' => json_encode([
                 'type'        => $operationName,
                 'card_number' => $bankAccount?->card_number,
-                'recipient'   => $operationName === 'transfer' ? $releted_user->name : $user->name,
+                'recipient'   => $operationName === 'transfer' || $operationName === 'escrow' ? $releted_user->name : $user->name,
             ]),
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_at' => $random_time,
+            'updated_at' => $random_time,
         ]);
     }
 
@@ -77,11 +97,14 @@ class TransactionSeeder extends Seeder
         $this->makeTransaction(1, 50, 'deposit');
         $this->makeTransaction(1, 20, 'withdraw');
 
-
-
-        $this->makeTransaction(2, 50, 'deposit');
+        $this->makeTransaction(2, 10000, 'deposit');
         $this->makeTransaction(2, 32, 'deposit');
         $this->makeTransaction(2, 20, 'withdraw');
         $this->makeTransaction(2, 20, 'transfer', 1);
+
+        $this->makeTransaction(3, 16600, 'deposit');
+        $this->makeTransaction(3, 11, 'deposit');
+        $this->makeTransaction(3, 22, 'withdraw');
+        $this->makeTransaction(3, 10, 'transfer', 1);
     }
 }

@@ -10,6 +10,7 @@ class Balance extends Model
     protected $fillable = [
         'user_id',
         'amount',
+        'escrowed_amount',
         'currency',
     ];
 

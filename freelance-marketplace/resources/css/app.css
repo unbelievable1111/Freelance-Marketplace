@@ -13,3 +13,27 @@
  .bank-card-template {
     max-width:  600px !important;
 }
+
+/* Тёмная пагинация Bootstrap 5 */
+.pagination {
+    background-color: #343a40; /* тёмный фон */
+    border-radius: 0.25rem;
+    justify-content: center; /* центрируем */
+}
+
+.pagination .page-link {
+    color: #f8f9fa; /* светлый текст */
+    background-color: #343a40;
+    border: 1px solid #495057;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #0d6efd; /* синий active */
+    border-color: #0d6efd;
+    color: #fff;
+}
+
+.pagination .page-link:hover {
+    background-color: #495057;
+    color: #fff;
+}

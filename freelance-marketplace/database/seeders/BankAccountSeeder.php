@@ -17,9 +17,13 @@ class BankAccountSeeder extends Seeder
             ['name' => 'My additionary card', 'card_number' => '5732547784315131', 'user_id' => '1'],
             ['name' => 'My third card', 'card_number' => '5732547784318764', 'user_id' => '1'],
 
-            ['name' => 'My card', 'card_number' => '5732542384315623', 'user_id' => '2'],
-            ['name' => 'My second card', 'card_number' => '453254778431233', 'user_id' => '2'],
-            ['name' => 'My third card', 'card_number' => '6732447734314764', 'user_id' => '2'],
+            ['name' => 'My card', 'card_number' => '1732542384315623', 'user_id' => '2'],
+            ['name' => 'My second card', 'card_number' => '253254778431233', 'user_id' => '2'],
+            ['name' => 'My third card', 'card_number' => '3732447734314764', 'user_id' => '2'],
+
+            ['name' => '1st card', 'card_number' => '1732542384313323', 'user_id' => '3'],
+            ['name' => 'My 2nd card', 'card_number' => '2532423778431233', 'user_id' => '3'],
+            ['name' => 'My 3rd card', 'card_number' => '3732444234314764', 'user_id' => '3'],
         ]);
     }
 }

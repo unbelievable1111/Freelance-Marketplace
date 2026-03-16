@@ -57,7 +57,13 @@
 
                         <div>
                             <small class="text-muted">Balance</small>
-                            <div class="fs-5 text-success">{{auth()->user()->Balance->amount}} USD</div>
+                            <div class="fs-5 text-success">
+                                 {{ auth()->user()->Balance->amount }} USD 
+
+                                @if (Auth()->user()->balance->escrowed_amount > 0)
+                                    <span class="text-warning"> ({{ Auth()->user()->balance->escrowed_amount }} USD ESCROWED)</span>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>

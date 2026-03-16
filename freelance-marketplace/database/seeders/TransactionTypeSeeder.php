@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -17,6 +16,9 @@ class TransactionTypeSeeder extends Seeder
             ['name' => 'deposit'],
             ['name' => 'withdraw'],
             ['name' => 'transfer'],
+            ['name' => 'escrow'],
+            ['name' => 'refund_escrow'],
+            ['name' => 'release_escrow'],
         ]);
     }
 }
