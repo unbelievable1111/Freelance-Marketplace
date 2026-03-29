@@ -46,7 +46,7 @@
                 <ul class="dropdown-menu">
                     @foreach ($uniqueOrderStatuses as $orderStatus)
                         <li>
-                            <a class="dropdown-item" href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $orderStatus->id]) }}">
+                            <a class="dropdown-item" href="{{ route('order.show-proposals', ['p' => $orders->currentPage(), 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $orderStatus->id]) }}">
                                 {{ $orderStatus->id }} - {{ $orderStatus->name }}
                             </a>
                         </li>
@@ -58,7 +58,7 @@
 
                     <li>
                         <a class="dropdown-item"
-                            href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'filterSubcategory' => $currentSubcategoryFilter->id]) }}">
+                            href="{{ route('order.show-proposals', ['p' => $orders->currentPage(), 'filterSubcategory' => $currentSubcategoryFilter->id]) }}">
                             Clear Order Status Filter
                         </a>
                     </li>
@@ -75,7 +75,7 @@
                     @foreach ($uniqueSubcategories as $subcategory)
                         <li>
                             <a class="dropdown-item"
-                                href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'filterSubcategory' => $subcategory->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
+                                href="{{ route('order.show-proposals', ['p' => $orders->currentPage(), 'filterSubcategory' => $subcategory->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
                                 {{ $subcategory->mainOrderCategory->name }} - {{ $subcategory->name }}
                             </a>
                         </li>
@@ -87,7 +87,7 @@
 
                     <li>
                         <a class="dropdown-item"
-                            href="{{ route('order.show-orders', ['p' => $orders->currentPage()]) }}">
+                            href="{{ route('order.show-proposals', ['p' => $orders->currentPage()]) }}">
                             Clear Subcategory Filter
                         </a>
                     </li>
@@ -104,31 +104,31 @@
                 <ul class="dropdown-menu">
                     <li>
                         <a class="dropdown-item"
-                            href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'sortType' => 'byTimeAsc', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
+                            href="{{ route('order.show-proposals', ['p' => $orders->currentPage(), 'sortType' => 'byTimeAsc', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
                             Sort by Time ↑ (oldest first)
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item"
-                            href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'sortType' => 'byTimeDesc', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
+                            href="{{ route('order.show-proposals', ['p' => $orders->currentPage(), 'sortType' => 'byTimeDesc', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
                             Sort by Time ↓ (newest first)
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item"
-                            href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'sortType' => 'byBudgetAsc', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
+                            href="{{ route('order.show-proposals', ['p' => $orders->currentPage(), 'sortType' => 'byBudgetAsc', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
                             Sort by Budget ↑ (lowest first)
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item"
-                            href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'sortType' => 'byBudgetDesc', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
+                            href="{{ route('order.show-proposals', ['p' => $orders->currentPage(), 'sortType' => 'byBudgetDesc', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
                             Sort by Budget ↓ (highest first)
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item"
-                            href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'sortType' => 'byStatus', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
+                            href="{{ route('order.show-proposals', ['p' => $orders->currentPage(), 'sortType' => 'byStatus', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
                             Sort by Status
                         </a>
                     </li>

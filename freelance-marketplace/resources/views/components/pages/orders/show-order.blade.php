@@ -12,11 +12,15 @@
                 return 'bg-info';
             case 'cancelled':
                 return 'bg-danger';
+            case 'expired':
+                return 'bg-secondary';
             default:
                 return 'bg-secondary';
         }
     }
 @endphp
+
+
 
 @section('content')
     <div class="container my-4">
@@ -34,6 +38,7 @@
                             <span class="badge bg-success p-2">
                                 {{ $order->created_at->format('Y-m-d H:i') }}
                             </span>
+                            
                             <span class="badge {{ getColorForOrderStatus($order->status->name) }} p-2">
                                 {{ $order->status->name }}
                             </span>
@@ -57,7 +62,8 @@
                                 <ul>
                                     @foreach ($order->fileAttachments as $attachment)
                                         <li>
-                                            <a href="{{ asset('storage/public_order_attachments/' . $attachment->stored_filename) }}" target="_blank">
+                                            <a href="{{ asset('storage/public_order_attachments/' . $attachment->stored_filename) }}"
+                                                target="_blank">
                                                 — {{ $attachment->original_filename }}
                                             </a>
                                         </li>
@@ -69,31 +75,51 @@
                         @endif
                     </div>
                 </div>
-
-                {{-- Footer --}}
-                <div class="card-footer bg-dark border-secondary d-flex justify-content-between align-items-center">
-                    <div>
-                        <span class="badge bg-primary p-2">{{ $order->subCategory->mainOrderCategory->name }} - {{ $order->subCategory->name }}</span>
-
-                        <span class="badge bg-success p-2">{{ $order->budget }} USD </span>
-
-                        <span class="badge bg-warning text-dark p-2">{{ $order->deadline_in_days }}
-                            day(s)
-                        </span>
-
-                        <span class="badge bg-light text-dark p-2">
-                            {{ $order->user->name }}
-                        </span>
-                    </div>
-
-                    @if(url()->previous() !== url()->current())
-                        <a href="{{ url()->previous() }}" class="btn btn-info btn-sm ps-2 pe-2">
-                            ← Previous Page
-                        </a>
-                    @endif
-                </div>
             </div>
         </div>
-    </div>
+
+        {{-- Footer --}}
+        <div class="card-footer bg-dark border-secondary d-flex justify-content-between align-items-center">
+            <div>
+                <span class="badge bg-primary p-2">{{ $order->subCategory->mainOrderCategory->name }} -
+                    {{ $order->subCategory->name }}</span>
+
+                <span class="badge bg-success p-2">{{ $order->budget }} USD </span>
+
+                <span class="badge bg-warning text-dark p-2">{{ $order->deadline_in_days }}
+                    day(s)
+                </span>
+
+                <span class="badge bg-light text-dark p-2">
+                    {{ $order->customer->name }}
+                </span>
+            </div>
+
+            @if (url()->previous() !== url()->current())
+                <a href="{{ url()->previous() }}" class="btn btn-info btn-sm ps-2 pe-2">
+                    ← Previous Page
+                </a>
+            @endif
+        </div>
+
+        @if ($order->executor && $order->executor->id === auth()->id() || $order->customer_id === auth()->id())
+            @include('components.pages.orders.progress-card')
+        @endif
+
+        @if ($order->status->name === 'published' && auth()->user()->UserRole->name === 'executor')
+            @if ($order->orderApproves()->where('user_id', auth()->id())->exists())
+                @include('components.pages.orders.approves.my-approve-form')
+            @else
+                @include('components.pages.orders.approves.approve-form')
+            @endif
+                 
+            @include('components.pages.orders.approves.order-approves')
+        @endif
+
+        @if (session('error'))
+            <div class="alert alert-danger mt-4">
+                {{ session('error') }}
+            </div>
+        @endif
     </div>
 @endsection

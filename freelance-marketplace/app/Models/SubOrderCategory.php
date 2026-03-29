@@ -18,4 +18,10 @@ class SubOrderCategory extends Model
     {
         return $this->belongsTo(MainOrderCategory::class);
     }
+
+    public static function getUniqueSubcategoriesFromOrders($orders)
+    {
+        $uniqueSubcategoriesIDs = $orders->pluck('sub_category_id')->unique();
+        return self::whereIn('id', $uniqueSubcategoriesIDs)->get();
+    }
 }

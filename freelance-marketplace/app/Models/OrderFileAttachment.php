@@ -11,7 +11,7 @@ class OrderFileAttachment extends Model
     protected $fillable = [
         'stored_filename',
         'original_filename',
-        'ordrer_id',
+        'order_id',
     ];
 
     public function order()

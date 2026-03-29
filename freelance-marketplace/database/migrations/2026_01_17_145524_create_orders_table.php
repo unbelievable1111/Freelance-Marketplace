@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('requirement_skills', 255);
             $table->string('short_description', 255);    
             $table->string('full_description', 5000);
-            $table->decimal('budget', 15, 2)->min(0);
+            $table->decimal('budget', 15, 2)->min(5);
             $table->foreignId('customer_id')->constrained("users", 'id');
             $table->foreignId('executor_id')->nullable()->constrained("users", 'id');
             $table->foreignId('status_id')->constrained("order_statuses", 'id');

@@ -15,6 +15,7 @@ class OrderStatusSeeder extends Seeder
             ['name' => 'in_progress'],
             ['name' => 'completed'],
             ['name' => 'cancelled'],
+            ['name' => 'expired'],
         ]);
     }
 }

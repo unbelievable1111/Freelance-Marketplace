@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(UserRoleSeeder::class);
-        
+     
         User::create([
             'name' => 'bob_worker',
             'email' => 'bob_worker@example.com',
@@ -57,6 +57,34 @@ class DatabaseSeeder extends Seeder
             'user_role_id' => 1,
         ]);
 
+        User::create([
+            'name' => 'ben',
+            'email' => 'ben@example.com',
+            'password' => bcrypt('password'),
+            'user_role_id' => 1,
+        ]);
+
+        User::create([
+            'name' => 'carol',
+            'email' => 'carol@example.com',
+            'password' => bcrypt('password'),
+            'user_role_id' => 1,
+        ]);
+
+        User::create([
+            'name' => 'david',
+            'email' => 'david@example.com',
+            'password' => bcrypt('password'),
+            'user_role_id' => 1,
+        ]);
+
+        User::create([
+            'name' => 'emma',
+            'email' => 'emma@example.com',
+            'password' => bcrypt('password'),
+            'user_role_id' => 1,
+        ]);
+
         $this->call(UserAvatarSeeder::class);
         $this->call(BankAccountSeeder::class);
         $this->call(BalanceSeeder::class);
@@ -67,5 +95,6 @@ class DatabaseSeeder extends Seeder
         $this->call(OrderStatusSeeder::class);
         $this->call(OrderFileAttachmentSeeder::class);
         $this->call(OrderSeeder::class);
+        $this->call(OrderApproveSeeder::class);
     }
 }

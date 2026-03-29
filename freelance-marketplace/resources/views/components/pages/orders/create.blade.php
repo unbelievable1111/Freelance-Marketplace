@@ -32,8 +32,7 @@
                                     <div class="row mt-3">
                                         <div class="col-3 text-end mt-1 fw-bold">Title:</div>
                                         <div class="col-9">
-                                            <input type="text" name="title" class="form-control text-center" required
-                                                value="{{ old('title') }}" maxlength="125" />
+                                            <input type="text" name="title" class="form-control text-center" required value="{{ old('title') }}" maxlength="125" />
                                         </div>
                                     </div>
 
@@ -65,8 +64,7 @@
                                     <div class="row mt-3">
                                         <div class="col-3 text-end mt-1 fw-bold">Budget (usd):</div>
                                         <div class="col-9">
-                                            <input type="number" name="budget" class="form-control text-center"
-                                                min="5" step="0.01" required value="5">
+                                            <input type="number" name="budget" class="form-control text-center" min="5" step="0.01" required value="5">
                                         </div>
                                     </div>
 
@@ -74,8 +72,7 @@
                                     <div class="row mt-3">
                                         <div class="col-3 text-end mt-1 fw-bold">Deadline (days):</div>
                                         <div class="col-9">
-                                            <input type="numeric" step="1" name="deadline_in_days"
-                                                class="form-control text-center" required value="1" min="1">
+                                            <input type="numeric" step="1" name="deadline_in_days" class="form-control text-center" required value="1" min="1">
                                         </div>
                                     </div>
 
@@ -83,9 +80,7 @@
                                     <div class="row mt-3">
                                         <div class="col-3 text-end mt-1 fw-bold">Select attachments:</div>
                                         <div class="col-9">
-                                            <input type="file" id="attachments" name="attachments[]" class="form-control"
-                                                multiple
-                                                accept=".png, .jpg, .jpeg, .pdf, .doc, .docx, .csv, .xls, .xlsx, .txt">
+                                            <input type="file" id="attachments" name="attachments[]" class="form-control" multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .docx, .csv, .xls, .xlsx, .txt">
                                         </div>
                                     </div>
 

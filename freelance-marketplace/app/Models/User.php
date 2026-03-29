@@ -82,4 +82,22 @@ class User extends Authenticatable
 
         return $this->hasMany(Order::class, 'customer_id', 'id');
     }
+
+    public function ordersAsExecutor(): HasMany
+    {
+        if ($this->UserRole->name !== 'executor') {
+            throw new \Exception('User is not a executor');
+        }
+
+        return $this->hasMany(Order::class, 'executor_id', 'id');
+    }
+
+    public function approves(): HasMany
+    {
+        if ($this->UserRole->name !== 'executor') {
+            throw new \Exception('User is not a executor');
+        }
+
+        return $this->hasMany(OrderApprove::class, 'user_id', 'id');
+    }
 }

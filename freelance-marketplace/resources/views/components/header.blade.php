@@ -15,14 +15,22 @@
         </a>
 
         @auth
-            @if(auth()->user()->UserRole->name === 'customer' || auth()->user()->UserRole->name === 'admin')
+            @if (auth()->user()->UserRole->name === 'customer' || auth()->user()->UserRole->name === 'executor')
                 <a href="{{ route('order.show-orders') }}" @class([
                     'nav-link px-2',
                     'link-secondary' => request()->routeIs('order.show-orders'),
                 ])>
                     My orders
                 </a>
+            @endif
 
+            @if (auth()->user()->UserRole->name === 'executor')
+                <a href="{{ route('order.show-proposals') }}" @class(['nav-link px-2', 'link-secondary' => request()->routeIs('order.show-proposals'),])>
+                    My proposals
+                </a>
+            @endif
+            
+            @if (auth()->user()->UserRole->name === 'customer')
                 <a href="{{ route('order.create-order') }}" @class([
                     'nav-link px-2',
                     'link-secondary' => request()->routeIs('order.create-order'),

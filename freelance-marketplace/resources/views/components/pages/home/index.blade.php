@@ -164,7 +164,7 @@
                                         day(s)
                                     </span>
 
-                                    <span class="badge bg-light text-dark p-2">{{ $order->user->name }}</span>
+                                    <span class="badge bg-light text-dark p-2">{{ $order->customer->name }}</span>
                                 </div>
 
                                 <a href="{{ route('order.show-order', $order) }}" class="btn btn-info btn-sm pl-2 pr-2 text">

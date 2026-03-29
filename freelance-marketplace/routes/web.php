@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderApproveController;
+use App\Http\Controllers\OrderCommentController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
@@ -15,21 +17,24 @@ Auth::routes();
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
 
 #ProfileController
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function ()
+{
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
 });
 
 #BankAccountController
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function ()
+{
     Route::get('/profile/bank-accounts', [BankAccountController::class, 'index'])->name('profile.bank-accounts');
     Route::delete('/profile/bank-accounts/delete/{bankAccount}', [BankAccountController::class, 'deleteCard'])->name('profile.bank-accounts.delete-card');
     Route::post('/profile/bank-accounts/create', [BankAccountController::class, 'createCard'])->name('profile.bank-accounts.create-card');
 });
 
 #TransactionController
-Route::middleware('auth')->group(function () {
+Route::middleware('auth')->group(function ()
+{
     Route::get('/profile/transactions/finance-operations', [TransactionController::class, 'index'])->name('profile.transactions.finance-operations');
     Route::get('/profile/transactions/history', [TransactionController::class, 'history'])->name('profile.transactions.history');
     Route::post('/profile/transactions/deposit', [TransactionController::class, 'deposit'])->name('profile.transactions.deposit');
@@ -37,7 +42,7 @@ Route::middleware('auth')->group(function () {
 });
 
 #OrderController
-Route::middleware('auth')->group(function () 
+Route::middleware('auth')->group(function ()
 {
     Route::get('/orders/create-order', [OrderController::class, 'createOrder'])->name('order.create-order');
     Route::post('/orders/create-order', [OrderController::class, 'createOrder'])->name('order.create-order');
@@ -47,4 +52,22 @@ Route::middleware('auth')->group(function ()
     Route::delete('/orders/delete-attachment/{attachment}', [OrderController::class, 'deleteAttachment'])->name('order.delete-attachment');
     Route::post('/orders/add-attachments/{order}', [OrderController::class, 'addAttachment'])->name('order.add-attachment');
     Route::patch('/orders/cancel-order/{order}', [OrderController::class, 'cancelOrder'])->name('order.cancel-order');
+    Route::patch('/orders/complete-order/{order}', [OrderController::class, 'completeOrder'])->name('order.complete-order');
+    Route::post('/orders/{order}/extend-deadline', [OrderController::class, 'extendDeadline'])->name('order.extend-deadline');
+});
+
+#OrderApproveController
+Route::middleware('auth')->group(function ()
+{
+    Route::post('/orders/{order}/approve', [OrderApproveController::class, 'makeApprove'])->name('order.approve');
+    Route::put('/orders/{order}/approve-update', [OrderApproveController::class, 'update'])->name('order.update-approve');
+    Route::delete('/orders/{order}/approve-cancel', [OrderApproveController::class, 'cancel'])->name('order.cancel-approve');
+    Route::post('/orders/{order}/approval-submit/{orderApproval}', [OrderApproveController::class, 'submit'])->name('order.approval-submit');
+    Route::get('/proposals', [OrderApproveController::class, 'showProposals'])->name('order.show-proposals');
+});
+
+#OrderCommentController
+Route::middleware('auth')->group(function ()
+{
+    Route::post('/orders/{order}/comments', [OrderCommentController::class, 'leaveComment'])->name('order.leave-comment');
 });

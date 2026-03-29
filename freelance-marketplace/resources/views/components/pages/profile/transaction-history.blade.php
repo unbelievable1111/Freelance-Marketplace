@@ -9,7 +9,7 @@
                 <th scope="col">Order</th>
                 <th scope="col">Type</th>
                 <th scope="col">Amount</th>
-                <th scope="col">Card Number</th>
+                <th scope="col">Card</th>
                 <th scope="col">Exucutor</th>
                 <th scope="col">Related User</th>
                 <th scope="col">
@@ -62,6 +62,15 @@
 
                         if ($transaction->related_user_id === auth()->user()->id) {
                             $amountClass = 'text-danger';
+                        }
+                    }
+                    elseif (strtolower($transaction->transactionType->name) === 'release_escrow') {
+                        if ($transaction->user_id === auth()->user()->id) {
+                            $amountClass = 'text-danger';
+                        }
+
+                        if ($transaction->related_user_id === auth()->user()->id) {
+                            $amountClass = 'text-success';
                         }
                     }
                     else

@@ -12,6 +12,8 @@
                 return 'bg-info';
             case 'cancelled':
                 return 'bg-danger';
+            case 'expired':
+                return 'bg-secondary';
             default:
                 return 'bg-secondary';
         }
@@ -99,13 +101,11 @@
 
                             <div class="ms-3 d-flex flex-column justify-content-end">
                                 <button type="submit" class="btn btn-success btn-sm mb-1">Update Order</button>
-                                <a href="{{ route('order.show-order', $order) }}"
-                                    class="btn btn-secondary btn-sm">Cancel</a>
+                                <a href="{{ route('order.show-order', $order) }}" class="btn btn-secondary btn-sm">Cancel</a>
                             </div>
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
 
@@ -147,13 +147,11 @@
                                 <p>No attachments available.</p>
                             @endif
 
-                            <form method="POST" action="{{ route('order.add-attachment', $order) }}"
-                                enctype="multipart/form-data">
+                            <form method="POST" action="{{ route('order.add-attachment', $order) }}" enctype="multipart/form-data">
                                 @csrf
                                 <input type="file" name="attachments[]"
                                     class="form-control bg-dark text-light border-secondary mt-2" multiple>
-                                <button type="submit" class="btn btn-primary btn-sm mt-2 w-100 p-3 mt-3">Add
-                                    Attachments</button>
+                                <button type="submit" class="btn btn-primary btn-sm mt-2 w-100 p-3 mt-3">Add Attachments</button>
                             </form>
 
                             @if (session('error'))
@@ -177,5 +175,7 @@
                 </button>
             </form>
         @endif
+
+        @include('components.pages.orders.approves.order-approves')
     </div>
 @endsection

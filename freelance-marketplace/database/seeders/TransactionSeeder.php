@@ -17,21 +17,11 @@ class TransactionSeeder extends Seeder
     {
         $user = User::findOrFail($user_id);
 
-        echo "related_user_id #$related_user_id\n";
-        
         $releted_user = $related_user_id ? User::findOrFail($related_user_id) : null;
 
-        if ($related_user_id)
-        {
-            echo "related_user_name #$releted_user->name\n";
-        }
-
-
-        if ($operationName != 'transfer' && $operationName != 'escrow' && count($user->BankAccounts) > 0){
+        if ($operationName != 'transfer' && $operationName != 'escrow' && count($user->BankAccounts) > 0) {
             $bankAccount = $user->BankAccounts[0];
-        } 
-        else 
-        {
+        } else {
             $bankAccount = null;
         }
         
@@ -77,7 +67,7 @@ class TransactionSeeder extends Seeder
         ]);
     }
 
-    /** Run the database seeds.*/
+    /** Run the database seeds. **/
     public function run(): void {
         $this->makeTransaction(1, 50, 'deposit');
         $this->makeTransaction(1, 20, 'withdraw');
