@@ -20,8 +20,6 @@
     }
 @endphp
 
-
-
 @section('content')
     <div class="container my-4">
         <div class="row justify-content-center">
@@ -38,7 +36,7 @@
                             <span class="badge bg-success p-2">
                                 {{ $order->created_at->format('Y-m-d H:i') }}
                             </span>
-                            
+
                             <span class="badge {{ getColorForOrderStatus($order->status->name) }} p-2">
                                 {{ $order->status->name }}
                             </span>
@@ -91,8 +89,19 @@
                 </span>
 
                 <span class="badge bg-light text-dark p-2">
-                    {{ $order->customer->name }}
+                    <a href="{{ route('public-profile.overview', $order->customer) }}" class="text-decoration-none text-dark">
+                        {{ $order->customer->name }}
+                    </a>
                 </span>
+
+                <div class="badge bg-light text-dark p-2">
+                    @for ($i = 0; $i < 5; $i++)
+                        <span
+                            class="{{ $i < (int) $order->customer->getAverageRatingAttribute() ? 'text-warning' : 'text-secondary' }}">
+                            ★
+                        </span>
+                    @endfor
+                </div>
             </div>
 
             @if (url()->previous() !== url()->current())
@@ -102,18 +111,22 @@
             @endif
         </div>
 
-        @if ($order->executor && $order->executor->id === auth()->id() || $order->customer_id === auth()->id())
+        @if ($order->executor && $order->userBelongsToOrder())
             @include('components.pages.orders.progress-card')
         @endif
 
-        @if ($order->status->name === 'published' && auth()->user()->UserRole->name === 'executor')
+        @if ($order->isPublished() && auth()->user()->UserRole->name === 'executor')
             @if ($order->orderApproves()->where('user_id', auth()->id())->exists())
                 @include('components.pages.orders.approves.my-approve-form')
             @else
                 @include('components.pages.orders.approves.approve-form')
             @endif
-                 
+
             @include('components.pages.orders.approves.order-approves')
+        @endif
+
+        @if ($order->isCompleted() && $order->userBelongsToOrder())
+            @include('components.pages.orders.review-card')
         @endif
 
         @if (session('error'))

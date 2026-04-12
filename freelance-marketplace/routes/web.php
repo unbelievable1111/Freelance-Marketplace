@@ -6,6 +6,7 @@ use App\Http\Controllers\OrderApproveController;
 use App\Http\Controllers\OrderCommentController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -19,9 +20,11 @@ Route::get('/', [HomeController::class, 'index'])->name('home.index');
 #ProfileController
 Route::middleware('auth')->group(function ()
 {
-    Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
-    Route::put('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
-    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::get('/profile',                          [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profile/avatar',                   [ProfileController::class, 'updateAvatar'])->name('profile.avatar.update');
+    Route::put('/profile/password',                 [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::get('/profile/edit',                     [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/public-profile/{publicUser}',      [ProfileController::class, 'publicProfileOverview'])->name('public-profile.overview');
 });
 
 #BankAccountController
@@ -70,4 +73,12 @@ Route::middleware('auth')->group(function ()
 Route::middleware('auth')->group(function ()
 {
     Route::post('/orders/{order}/comments', [OrderCommentController::class, 'leaveComment'])->name('order.leave-comment');
+});
+
+#ReviewController
+Route::middleware('auth')->group(function ()
+{
+    Route::post('/orders/{order}/leave-review', [ReviewController::class, 'leaveReview'])->name('order.leave-review');
+    Route::delete('/reviews/{review}/delete', [ReviewController::class, 'delete'])->name('order.delete-review');
+    Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
 });

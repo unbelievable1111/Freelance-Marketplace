@@ -44,8 +44,6 @@ class TransactionController extends Controller
             ->paginate($perPage, ['*'], 'page', $request->query('page'))
             ->withQueryString();    
 
-        
-
         return view('components.pages.profile.transaction-history', compact(['transactions', 'order', 'page', 'totalPages']));
     }
 

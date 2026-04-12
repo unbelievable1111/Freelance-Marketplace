@@ -11,7 +11,7 @@
                 <div class="mb-3">
                     <label class="form-label">
                         <b>Executor: </b>
-                        {{ $order->executor ? $order->executor->name : 'Not assigned yet' }}
+                        {!! $order->executor ? '<a href="' . route('public-profile.overview', $order->executor) . '" class="text-decoration-none text-light">' . $order->executor->name . '</a>' : 'Not assigned yet' !!}
                     </label>
                 </div>
 
@@ -37,7 +37,9 @@
                                         <div class="d-flex justify-content-between align-items-start mb-2">
                                             <div>
                                                 <div class="fw-semibold">
-                                                    {{ $comment->user->name }}
+                                                    <a href="{{ route('public-profile.overview', $comment->user) }}" class="text-decoration-none text-light">
+                                                        {{ $comment->user->name }}
+                                                    </a>
                                                     <span
                                                         class="badge {{ $comment->user->UserRole->name == 'customer' ? 'bg-danger' : 'bg-success' }} ms-2 p-2">
                                                         {{ $comment->user->UserRole->name }}
@@ -98,23 +100,25 @@
                     @endif
 
                     {{-- Form for leaving a comment --}}
-                    <form action="{{ route('order.leave-comment', $order) }}" method="POST"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <textarea name="value" class="form-control bg-dark text-light border-secondary" rows="3"
-                            placeholder="Leave a comment for your proposal..." required></textarea>
+                    @if ($order->isInProgress() && $order->userBelongsToOrder())
+                        <form action="{{ route('order.leave-comment', $order) }}" method="POST"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <textarea name="value" class="form-control bg-dark text-light border-secondary" rows="3"
+                                placeholder="Leave a comment for your proposal..." required></textarea>
 
-                        {{-- FILE UPLOAD --}}
-                        <div class="row mt-3">
-                            <div class="col-2 text-end mt-1 fw-bold">Select attachments:</div>
-                            <div class="col-10">
-                                <input type="file" id="attachments" name="attachments[]" class="form-control"
-                                    multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .docx, .csv, .xls, .xlsx, .txt">
+                            {{-- FILE UPLOAD --}}
+                            <div class="row mt-3">
+                                <div class="col-2 text-end mt-1 fw-bold">Select attachments:</div>
+                                <div class="col-10">
+                                    <input type="file" id="attachments" name="attachments[]" class="form-control"
+                                        multiple accept=".png, .jpg, .jpeg, .pdf, .doc, .docx, .csv, .xls, .xlsx, .txt">
+                                </div>
                             </div>
-                        </div>
 
-                        <button type="submit" class="btn btn-success btn-sm mt-3 w-100 p-2">Leave a comment</button>
-                    </form>
+                            <button type="submit" class="btn btn-success btn-sm mt-3 w-100 p-2">Leave a comment</button>
+                        </form>
+                    @endif
 
                     @if (session('leaveCommentError'))
                         <div class="alert alert-danger mt-4">

@@ -59,9 +59,19 @@ class Order extends Model
         return $this->status_id == OrderStatus::where('name', 'in_progress')->first()->id; 
     }
 
+    public function isPublished() : bool
+    {
+        return $this->status_id == OrderStatus::where('name', 'published')->first()->id; 
+    }
+
     public function isExpired() : bool
     {
         return $this->status_id == OrderStatus::where('name', 'expired')->first()->id; 
+    }
+
+    public function isCompleted() : bool
+    {
+        return $this->status_id == OrderStatus::where('name', 'completed')->first()->id; 
     }
 
     public function comments() : HasMany
@@ -94,7 +104,8 @@ class Order extends Model
 
     public function checkDeadline()
     {
-        if ($this->executor_id !== null) {
+        if ($this->executor_id !== null) 
+        {
             if ($this->deadline_date && now()->greaterThan($this->deadline_date) && $this->status()->first()->name === 'in_progress') {
                 $this->status_id = OrderStatus::where('name', 'expired')->value('id');
             }
@@ -105,7 +116,44 @@ class Order extends Model
 
             $this->save();
 
-            return; // No executor assigned, so no need to check deadline
+            return;
         }
+    }
+
+    public function hasReviewForCustomer()
+    {
+        return Review::where('order_id', $this->id)
+            ->where(function ($q) {
+                $q->where('author_id', $this->executor_id);
+            })->exists();
+    }
+
+    public function hasReviewForExecutor()
+    {
+        return Review::where('order_id', $this->id)
+            ->where(function ($q) {
+                $q->where('author_id', $this->customer_id);
+            })->exists();
+    }
+
+    public function reviewForExecutor()
+    {
+        return Review::where('order_id', $this->id)
+            ->where(function ($q) {
+                $q->where('author_id', $this->customer_id);
+            })->first();
+    }
+
+    public function reviewForCustomer()
+    {
+        return Review::where('order_id', $this->id)
+            ->where(function ($q) {
+                $q->where('author_id', $this->executor_id);
+            })->first();
+    }
+
+    public function userBelongsToOrder()
+    {
+        return auth()->id() === $this->customer_id || auth()->id() === $this->executor_id;
     }
 }

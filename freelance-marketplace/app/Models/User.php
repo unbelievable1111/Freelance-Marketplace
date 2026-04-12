@@ -100,4 +100,29 @@ class User extends Authenticatable
 
         return $this->hasMany(OrderApprove::class, 'user_id', 'id');
     }
+
+    public function Reviews(): HasMany
+    {
+        return $this->hasMany(Review::class, 'target_id', 'id');
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return Review::where('target_id', $this->id)->avg('score');
+    }
+
+    public function isExecutor()
+    {
+        return $this->UserRole->name === 'executor';
+    }
+
+    public function isCustomer()
+    {
+        return $this->UserRole->name === 'customer';
+    }
+
+    public function hasReviews()
+    {
+        return $this->Reviews()->exists();
+    }
 }

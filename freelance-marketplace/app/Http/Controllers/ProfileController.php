@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Review;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -18,6 +21,26 @@ class ProfileController extends Controller
     public function index()
     {
         return view('components.pages.profile.general');
+    }
+
+    public function publicProfileOverview(User $publicUser)
+    {
+        if ($publicUser->id === auth()->id())
+        {
+            return redirect()->route('profile.index');
+        }
+
+        if (!$publicUser->isExecutor() && !$publicUser->isCustomer())
+        {
+            abort(404);
+        }
+
+        $reviews = Review::where('target_id', $publicUser->id)
+            ->latest()
+            ->paginate(5);
+        
+
+        return view('components.pages.profile.public-overview', compact('publicUser', 'reviews'));
     }
 
     public function updatePassword(Request $request)

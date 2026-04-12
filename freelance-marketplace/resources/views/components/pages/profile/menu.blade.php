@@ -10,7 +10,9 @@
                         height="32" role="img" aria-label="Bootstrap">
                     <span class="fs-4">My profile</span>
                 </a>
+                
                 <hr>
+
                 <ul class="nav nav-pills flex-column">
                     <li class="nav-item">
                         <a href="{{ route('profile.index') }}"
@@ -40,6 +42,13 @@
                         </a>
                     </li>
 
+                    <li class="nav-item">
+                        <a href="{{ route('reviews.index', ['order' => 'desc', 'page' => 1]) }}"
+                            class="nav-link {{ request()->routeIs('reviews.index') ? 'active' : 'text-white' }}">
+                            Reviews
+                        </a>
+                    </li>
+
                     {{-- 
                         <li class="nav-item">
                             <a href="{{ route('profile.transactions') }}"
@@ -58,7 +67,7 @@
                 </ul>
                 <hr>
             </div>
-            <div class="col-9">
+            <div class="col-9 p-0">
                 @yield('profile-content')
             </div>
         </div>

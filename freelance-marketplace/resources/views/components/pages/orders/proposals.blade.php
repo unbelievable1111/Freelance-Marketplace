@@ -154,7 +154,9 @@
                             <div
                                 class="card-header bg-dark border-secondary d-flex justify-content-between align-items-center">
                                 <h5 class="mt-2 mb-2 fw-semibold text-light">
-                                    {{ $order->title }}
+                                    <a href="{{ route('order.show-order', $order) }}" class="text-decoration-none text-light">
+                                        {{ $order->title }}
+                                    </a>
                                 </h5>
 
                                 {{-- Categories --}}
@@ -187,7 +189,20 @@
 
                                     <span class="badge bg-warning text-dark p-2">{{ $order->deadline_in_days }} day(s)</span>
 
-                                    <span class="badge bg-light text-dark p-2">{{ $order->customer->name }}</span>
+                                    <span class="badge bg-light text-dark p-2">
+                                        <a href="{{ route('public-profile.overview', $order->customer) }}" class="text-decoration-none text-dark">
+                                            {{ $order->customer->name }}
+                                        </a>
+                                    </span>
+
+                                    <div class="badge bg-light text-dark p-2">
+                                        @for ($i = 0; $i < 5; $i++)
+                                            <span
+                                                class="{{ $i < (int) $order->customer->getAverageRatingAttribute() ? 'text-warning' : 'text-secondary' }}">
+                                                ★
+                                            </span>
+                                        @endfor
+                                    </div>
                                 </div>
 
                                 <a href="{{ route('order.show-order', $order) }}" class="btn btn-info btn-sm pl-2 pr-2 text">View Details →</a>

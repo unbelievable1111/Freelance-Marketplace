@@ -55,6 +55,18 @@
                             <div class="fs-5">{{ auth()->user()->UserRole->name }}</div>
                         </div>
 
+                        <div class="mb-3">
+                            <small class="text-muted">Average Rating</small>
+
+                            @if (auth()->user()->Reviews->count() > 0)
+                                <div class="fs-5">
+                                    {{ (int) auth()->user()->getAverageRatingAttribute() . " / 5 (" . auth()->user()->Reviews->count() . " reviews)" }}
+                                </div>
+                            @else
+                                <div class="fs-5">No reviews yet</div>  
+                            @endif
+                        </div>
+
                         <div>
                             <small class="text-muted">Balance</small>
                             <div class="fs-5 text-success">

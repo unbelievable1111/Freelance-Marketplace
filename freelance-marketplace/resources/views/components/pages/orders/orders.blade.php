@@ -1,7 +1,4 @@
-@extends('main')
-
-@section('content')
-    <div class="container my-4">
+<div class="container my-4">
         @php
             $sortType = request()->query('sortType', 'default');
 
@@ -13,10 +10,10 @@
                 'byStatus' => 'Sort by Status',
                 'default' => 'Sort Orders',
             ];
-            
+
             $generalSortTypeText = $sortNames[$sortType] ?? 'Sort Orders';
 
-            function getColorForOrderStatus($orderStatusName) 
+            function getColorForOrderStatus($orderStatusName)
             {
                 switch ($orderStatusName) {
                     case 'published':
@@ -27,6 +24,8 @@
                         return 'bg-info';
                     case 'cancelled':
                         return 'bg-danger';
+                    case 'expired':
+                        return 'bg-secondary';
                     default:
                         return 'bg-secondary';
                 }
@@ -34,18 +33,19 @@
         @endphp
 
         <div class="d-flex justify-content-end gap-2 mb-4">
-            {{-- Subcategory Filter Dropdown --}}
+            {{-- Order Status Filter Dropdown --}}
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-                    {{ $currentSubcategoryFilter->name }}
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    {{ $currentOrderStatusFilter->name }}
                 </button>
 
                 <ul class="dropdown-menu">
-                    @foreach ($uniqueSubcategories as $subcategory)
+                    @foreach ($uniqueOrderStatuses as $orderStatus)
                         <li>
                             <a class="dropdown-item"
-                                href="{{ route('home.index', ['p' => $orders->currentPage(), 'filterSubcategory' => $subcategory->id]) }}">
-                                {{ $subcategory->mainOrderCategory->name }} - {{ $subcategory->name }}
+                                href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $orderStatus->id]) }}">
+                                {{ $orderStatus->id }} - {{ $orderStatus->name }}
                             </a>
                         </li>
                     @endforeach
@@ -56,7 +56,36 @@
 
                     <li>
                         <a class="dropdown-item"
-                            href="{{ route('home.index', ['p' => $orders->currentPage()]) }}">
+                            href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'filterSubcategory' => $currentSubcategoryFilter->id]) }}">
+                            Clear Order Status Filter
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            {{-- Subcategory Filter Dropdown --}}
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    {{ $currentSubcategoryFilter->name }}
+                </button>
+
+                <ul class="dropdown-menu">
+                    @foreach ($uniqueSubcategories as $subcategory)
+                        <li>
+                            <a class="dropdown-item"
+                                href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'filterSubcategory' => $subcategory->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
+                                {{ $subcategory->mainOrderCategory->name }} - {{ $subcategory->name }}
+                            </a>
+                        </li>
+                    @endforeach
+
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+
+                    <li>
+                        <a class="dropdown-item" href="{{ route('order.show-orders', ['p' => $orders->currentPage()]) }}">
                             Clear Subcategory Filter
                         </a>
                     </li>
@@ -73,31 +102,31 @@
                 <ul class="dropdown-menu">
                     <li>
                         <a class="dropdown-item"
-                            href="{{ route('home.index', ['p' => $orders->currentPage(), 'sortType' => 'byTimeAsc', 'filterSubcategory' => $currentSubcategoryFilter->id]) }}">
+                            href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'sortType' => 'byTimeAsc', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
                             Sort by Time ↑ (oldest first)
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item"
-                            href="{{ route('home.index', ['p' => $orders->currentPage(), 'sortType' => 'byTimeDesc', 'filterSubcategory' => $currentSubcategoryFilter->id]) }}">
+                            href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'sortType' => 'byTimeDesc', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
                             Sort by Time ↓ (newest first)
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item"
-                            href="{{ route('home.index', ['p' => $orders->currentPage(), 'sortType' => 'byBudgetAsc', 'filterSubcategory' => $currentSubcategoryFilter->id]) }}">
+                            href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'sortType' => 'byBudgetAsc', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
                             Sort by Budget ↑ (lowest first)
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item"
-                            href="{{ route('home.index', ['p' => $orders->currentPage(), 'sortType' => 'byBudgetDesc', 'filterSubcategory' => $currentSubcategoryFilter->id]) }}">
+                            href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'sortType' => 'byBudgetDesc', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
                             Sort by Budget ↓ (highest first)
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item"
-                            href="{{ route('home.index', ['p' => $orders->currentPage(), 'sortType' => 'byStatus', 'filterSubcategory' => $currentSubcategoryFilter->id]) }}">
+                            href="{{ route('order.show-orders', ['p' => $orders->currentPage(), 'sortType' => 'byStatus', 'filterSubcategory' => $currentSubcategoryFilter->id, 'filterOrderStatus' => $currentOrderStatusFilter->id]) }}">
                             Sort by Status
                         </a>
                     </li>
@@ -115,9 +144,7 @@
                     </div>
                 @else
                     @if (count($orders) === 0)
-                        <div class="alert alert-info text-center">
-                            No orders found on this page.
-                        </div>
+                        <div class="alert alert-info text-center">No orders found on this page.</div>
                     @endif
 
                     @foreach ($orders as $order)
@@ -142,7 +169,7 @@
                                 </div>
                             </div>
 
-                            {{-- Body --}}
+                            {{-- Order Description Body --}}
                             <div class="card-body">
                                 <p class="text-ligth mb-3">{{ $order->short_description }}</p>
 
@@ -155,16 +182,13 @@
                             {{-- Footer --}}
                             <div
                                 class="card-footer bg-dark border-secondary d-flex justify-content-between align-items-center">
-
                                 <div>
                                     <span class="badge bg-primary p-2">{{ $order->subCategory->mainOrderCategory->name }} -
                                         {{ $order->subCategory->name }}</span>
 
                                     <span class="badge bg-success p-2">{{ $order->budget }} USD</span>
 
-                                    <span class="badge bg-warning text-dark p-2">{{ $order->deadline_in_days }}
-                                        day(s)
-                                    </span>
+                                    <span class="badge bg-warning text-dark p-2">{{ $order->deadline_in_days }} day(s)</span>
 
                                     <span class="badge bg-light text-dark p-2">
                                         <a href="{{ route('public-profile.overview', $order->customer) }}" class="text-decoration-none text-dark">
@@ -174,16 +198,16 @@
 
                                     <div class="badge bg-light text-dark p-2">
                                         @for ($i = 0; $i < 5; $i++)
-                                            <span class="{{ $i < (int) $order->customer->getAverageRatingAttribute() ? 'text-warning' : 'text-secondary' }}">
+                                            <span
+                                                class="{{ $i < (int) $order->customer->getAverageRatingAttribute() ? 'text-warning' : 'text-secondary' }}">
                                                 ★
                                             </span>
                                         @endfor
                                     </div>
                                 </div>
 
-                                <a href="{{ route('order.show-order', $order) }}" class="btn btn-info btn-sm pl-2 pr-2 text">
-                                    View Details →
-                                </a>
+                                <a href="{{ route('order.show-order', $order) }}"
+                                    class="btn btn-info btn-sm pl-2 pr-2 text">View Details →</a>
                             </div>
                         </div>
                     @endforeach
@@ -195,4 +219,3 @@
     <div class="mt-4 text-center">
         {{ $orders->appends(request()->except('p'))->links('vendor.pagination.bootstrap-5-dark') }}
     </div>
-@endsection

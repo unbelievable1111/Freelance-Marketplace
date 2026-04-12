@@ -26,7 +26,7 @@
         {{-- Header --}}
         <div class="card-header bg-dark border-secondary d-flex justify-content-between align-items-center">
             <h5 class="mt-2 mb-2 fw-semibold text-light">Proposals</h5>
-            
+
             <div class="d-flex align-items-center gap-2">
                 {{-- start --}}
                 <div class="dropdown">
@@ -90,14 +90,31 @@
                             <div class="d-flex justify-content-between align-items-center">
                                 {{-- LEFT: User + Date --}}
                                 <div>
-                                    <strong>{{ $approve->user->name ?? 'Unknown User' }}</strong>
+                                    <strong>
+                                        <a href="{{ route('public-profile.overview', $approve->user) }}"
+                                            class="text-decoration-none text-light">
+                                            {{ $approve->user->name }}
+
+                                        </a>
+                                    </strong>
                                     <span class="text-muted small ms-2">
                                         {{ $approve->created_at->format('Y-m-d H:i') }}
                                     </span>
+
+                                    <div class="badge  text-dark p-2">
+                                        @for ($i = 0; $i < 5; $i++)
+                                            <span
+                                                class="{{ $i < (int) $approve->user->getAverageRatingAttribute() ? 'text-warning' : 'text-secondary' }}">
+                                                ★
+                                            </span>
+                                        @endfor
+                                    </div>
                                 </div>
 
                                 {{-- RIGHT: Badges + Buttons --}}
                                 <div class="d-flex align-items-center gap-1">
+
+
                                     <span class="badge bg-warning text-dark p-2">
                                         {{ $approve->proposed_deadline_in_days }} day(s)
                                     </span>
