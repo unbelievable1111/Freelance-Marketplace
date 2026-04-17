@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderApproveController;
 use App\Http\Controllers\OrderCommentController;
@@ -81,4 +82,16 @@ Route::middleware('auth')->group(function ()
     Route::post('/orders/{order}/leave-review', [ReviewController::class, 'leaveReview'])->name('order.leave-review');
     Route::delete('/reviews/{review}/delete', [ReviewController::class, 'delete'])->name('order.delete-review');
     Route::get('/reviews', [ReviewController::class, 'index'])->name('reviews.index');
+});
+
+#ChatController
+Route::middleware('auth')->group(function ()
+{
+    Route::get('/chats',                            [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chats/{chat}',                     [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chats/start/{order}/{receiver}',  [ChatController::class, 'startChat'])->name('chat.start-chat');
+    Route::post('/chats/{chat}/send-message',       [ChatController::class, 'sendMessage'])->name('chat.send-message');
+    Route::get('/chat/{chat}/new-messages',         [ChatController::class, 'getNewMessages'])->name('chat.new-messages');
+    Route::get('/chat/{chat}/older-messages',       [ChatController::class, 'getOlderMessages'])->name('chat.older-messages');
+    Route::get('/chat-statuses/unread-status',      [ChatController::class, 'getUnreadStatus'])->name('chat.unread-status');
 });

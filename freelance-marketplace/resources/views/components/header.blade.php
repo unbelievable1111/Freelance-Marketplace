@@ -22,6 +22,13 @@
                 ])>
                     My orders
                 </a>
+
+                <a href="{{ route('chat.index') }}" @class([
+                    'nav-link px-2',
+                    'link-secondary' => request()->routeIs('chat.*'),
+                ])>
+                    My chats
+                </a>
             @endif
 
             @if (auth()->user()->UserRole->name === 'executor')
@@ -38,20 +45,17 @@
                     Create an order
                 </a>
             @endif
-        @endauth
 
-        @auth
-            <a href="{{ route('profile.index') }}" @class([
-                'nav-link px-2',
-                'link-secondary' => request()->routeIs('profile.*'),
-            ])>
+            <a href="{{ route('profile.index') }}" @class(['nav-link px-2', 'link-secondary' => request()->routeIs('profile.*'),])>
                 My profile
             </a>
         @endauth
 
-        <li><a href="#" class="nav-link px-2">Features</a></li>
-        <li><a href="#" class="nav-link px-2">Pricing</a></li>
-        <li><a href="#" class="nav-link px-2">FAQs</a></li>
+        @guest
+            <li><a href="#" class="nav-link px-2">Pricing</a></li>
+            <li><a href="#" class="nav-link px-2">Features</a></li>
+            <li><a href="#" class="nav-link px-2">FAQs</a></li>
+        @endguest
     </ul>
 
     <div class="col-md-3 text-end mr-3">

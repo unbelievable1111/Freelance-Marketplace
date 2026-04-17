@@ -1,7 +1,8 @@
 @php
     $sortType = request()->query('proposalSortType', 'default');
 
-    $sortNames = [
+    $sortNames = 
+    [
         'byTimeAsc' => 'Sort by Time ↑ (oldest first)',
         'byTimeDesc' => 'Sort by Time ↓ (newest first)',
         'byBudgetAsc' => 'Sort by Budget ↑ (lowest first)',
@@ -97,6 +98,7 @@
 
                                         </a>
                                     </strong>
+
                                     <span class="text-muted small ms-2">
                                         {{ $approve->created_at->format('Y-m-d H:i') }}
                                     </span>
@@ -113,8 +115,6 @@
 
                                 {{-- RIGHT: Badges + Buttons --}}
                                 <div class="d-flex align-items-center gap-1">
-
-
                                     <span class="badge bg-warning text-dark p-2">
                                         {{ $approve->proposed_deadline_in_days }} day(s)
                                     </span>
@@ -124,9 +124,12 @@
                                     </span>
 
                                     @if (Auth::check() && Auth::id() === $order->customer_id)
-                                        <button class="badge bg-info p-2" data-bs-toggle="modal">
-                                            Start chat
-                                        </button>
+                                        <form action="{{ route('chat.start-chat', [$order, 'receiver' => $approve->user_id]) }}" method="POST" class="d-inline">
+                                            @csrf
+                                            <button type="submit" class="badge bg-info p-2" data-bs-toggle="modal">
+                                                Start chat
+                                            </button>
+                                        </form>
 
                                         <form action="{{ route('order.approval-submit', [$order, $approve]) }}"
                                             method="POST" class="d-inline">
