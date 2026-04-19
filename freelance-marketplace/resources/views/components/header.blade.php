@@ -1,76 +1,149 @@
-<header
-    class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-    <div class="col-md-3 mb-2 mb-md-0">
-        <a href="{{ route('home.index') }}" class="d-inline-flex link-body-emphasis text-decoration-none">
-            <img src="{{ asset('storage/images/f.png') }}" alt="Logo" class="bi ml-3" width="50" height="32" role="img" aria-label="Bootstrap">
+@php
+    use App\Models\Notification;
+@endphp
+
+<header class="d-flex align-items-center justify-content-between px-3 py-2 border-bottom flex-wrapmb-5 mb-4">
+    <!-- LOGO -->
+    <div class="d-flex align-items-center">
+        <a href="{{ route('home.index') }}" class="d-flex align-items-center text-decoration-none">
+            <img src="{{ asset('storage/images/f.png') }}" alt="Logo" width="40" height="26">
         </a>
     </div>
 
-    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-        <a href="{{ route('home.index') }}" @class([
-            'nav-link px-2',
-            'link-secondary' => request()->routeIs('home.index'),
-        ])>
-            Home
-        </a>
+    <!-- NAV -->
+    <ul class="nav d-flex align-items-center gap-1 flex-wrap justify-content-center my-1  p-3 ">
+        <li>
+            <a href="{{ route('home.index') }}"
+                class="nav-link px-2 py-1 {{ request()->routeIs('home.index') ? 'link-secondary' : '' }}">
+                Home
+            </a>
+        </li>
 
         @auth
-            @if (auth()->user()->UserRole->name === 'customer' || auth()->user()->UserRole->name === 'executor')
-                <a href="{{ route('order.show-orders') }}" @class([
-                    'nav-link px-2',
-                    'link-secondary' => request()->routeIs('order.show-orders'),
-                ])>
-                    My orders
-                </a>
+            @if (in_array(auth()->user()->UserRole->name, ['customer', 'executor']))
+                <li>
+                    <a href="{{ route('order.show-orders') }}"
+                        class="nav-link px-2 py-1 {{ request()->routeIs('order.show-orders') ? 'link-secondary' : '' }}">
+                        My orders
+                    </a>
+                </li>
 
-                <a href="{{ route('chat.index') }}" @class([
-                    'nav-link px-2',
-                    'link-secondary' => request()->routeIs('chat.*'),
-                ])>
-                    My chats
-                </a>
+                <li>
+                    <a href="{{ route('chat.index') }}"
+                        class="nav-link px-2 py-1 {{ request()->routeIs('chat.*') ? 'link-secondary' : '' }}">
+                        My chats
+                    </a>
+                </li>
             @endif
 
             @if (auth()->user()->UserRole->name === 'executor')
-                <a href="{{ route('order.show-proposals') }}" @class(['nav-link px-2', 'link-secondary' => request()->routeIs('order.show-proposals'),])>
-                    My proposals
-                </a>
-            @endif
-            
-            @if (auth()->user()->UserRole->name === 'customer')
-                <a href="{{ route('order.create-order') }}" @class([
-                    'nav-link px-2',
-                    'link-secondary' => request()->routeIs('order.create-order'),
-                ])>
-                    Create an order
-                </a>
+                <li>
+                    <a href="{{ route('order.show-proposals') }}"
+                        class="nav-link px-2 py-1 {{ request()->routeIs('order.show-proposals') ? 'link-secondary' : '' }}">
+                        My proposals
+                    </a>
+                </li>
             @endif
 
-            <a href="{{ route('profile.index') }}" @class(['nav-link px-2', 'link-secondary' => request()->routeIs('profile.*'),])>
-                My profile
-            </a>
+            @if (auth()->user()->UserRole->name === 'customer')
+                <li>
+                    <a href="{{ route('order.create-order') }}"
+                        class="nav-link px-2 py-1 {{ request()->routeIs('order.create-order') ? 'link-secondary' : '' }}">
+                        Create order
+                    </a>
+                </li>
+            @endif
+
+            <li>
+                <a href="{{ route('profile.index') }}"
+                    class="nav-link px-2 py-1 {{ request()->routeIs('profile.*') ? 'link-secondary' : '' }}">
+                    My profile
+                </a>
+            </li>
+
+
         @endauth
 
-        @guest
-            <li><a href="#" class="nav-link px-2">Pricing</a></li>
-            <li><a href="#" class="nav-link px-2">Features</a></li>
-            <li><a href="#" class="nav-link px-2">FAQs</a></li>
-        @endguest
+        <li><a href="#" class="nav-link px-2 py-1">Pricing</a></li>
+        <li><a href="#" class="nav-link px-2 py-1">Features</a></li>
+        <li><a href="#" class="nav-link px-2 py-1">FAQs</a></li>
+
+        @auth
+            <li>
+                <a href="{{ route('notifications.index') }}"
+                    class="nav-link px-2 py-1 {{ request()->routeIs('notifications.*') ? 'link-secondary' : '' }}">
+                    Notifications 
+                    
+                    <span id="notification-badge"
+                        class="badge bg-danger p-2"
+                        style="{{ Notification::getUnreadAmount(auth()->user()) > 0 ? '' : 'display:none;' }}">
+                        {{ Notification::getUnreadAmount(auth()->user()) }}
+                    </span>
+                </a>
+            </li>
+        @endauth
     </ul>
 
-    <div class="col-md-3 text-end mr-3">
+    <!-- AUTH BUTTONS -->
+    <div class="d-flex align-items-center gap-2">
         @guest
-            <a href="{{ route('login') }}"><button type="button" class="btn btn-outline-primary me-2">Login</button></a>
-            <a href="{{ route('register') }}"><button type="button" class="btn btn-primary">Sign-up</button></a>
+            <a href="{{ route('login') }}" class="btn btn-outline-primary btn-sm">Login</a>
+            <a href="{{ route('register') }}" class="btn btn-primary btn-sm">Sign up</a>
         @endguest
 
         @auth
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
-                <button type="submit" class="btn btn-primary">
+                <button type="submit" class="btn btn-primary btn-sm">
                     Logout
                 </button>
             </form>
         @endauth
     </div>
 </header>
+
+<script>
+    const unreadUrl = "{{ route('notifications.unread-count') }}";
+    let lastCount = null;
+
+    const notificationSound = new Audio('/sounds/notify.mp3'); // положи файл в public/sounds
+
+    function updateNotificationCount() {
+        if (document.hidden) return;
+
+        fetch(unreadUrl, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => {
+            if (!response.ok || response.redirected) {
+                return null;
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (!data) return;
+
+            const badge = document.getElementById('notification-badge');
+            if (!badge) return;
+
+            if (lastCount !== null && data.count > lastCount) {
+                notificationSound.play().catch(() => {});
+            }
+
+            lastCount = data.count;
+
+            if (data.count > 0) {
+                badge.style.display = 'inline-block';
+                badge.textContent = data.count;
+            } else {
+                badge.style.display = 'none';
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    setInterval(updateNotificationCount, 5000);
+    updateNotificationCount();
+</script>

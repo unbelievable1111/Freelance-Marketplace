@@ -96,5 +96,7 @@ class DatabaseSeeder extends Seeder
         $this->call(OrderFileAttachmentSeeder::class);
         $this->call(OrderSeeder::class);
         $this->call(OrderApproveSeeder::class);
+        $this->call(NotificationTypeSeeder::class);
+        $this->call(NotificationSeeder::class);
     }
 }

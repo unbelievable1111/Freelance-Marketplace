@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Balance;
 use App\Models\MainOrderCategory;
+use App\Models\Notification;
+use App\Models\NotificationType;
 use App\Models\Order;
 use App\Models\OrderFileAttachment;
 use App\Models\OrderStatus;
@@ -547,6 +549,17 @@ class OrderController extends Controller
                         'user_id' => Auth::id(),
                     ]);
                 }
+
+                #Notification
+                $receiverId = Auth::user()->UserRole->name === 'customer' ? $order->executor_id : $order->customer_id;
+                $receiver = User::find($receiverId);
+                Notification::createNotification(
+                    $receiver,
+                    NotificationType::getByName('order_cancelled'),
+                    'Order Cancelled',
+                    'The order has been cancelled. ' .
+                    '<a href="' . route('order.show-order', $order->id) . '" class="text-decoration-none">"' . e($order->title) . '"</a>.'
+                );
             });
 
             return redirect()->back()->with('success', 'Order cancelled successfully!');
@@ -696,6 +709,15 @@ class OrderController extends Controller
                         'comment'   => 'fee for the completed order'
                     ],
                 ]);
+
+                Notification::createNotification(
+                    User::find($order->executor_id),
+                    NotificationType::getByName('order_completed'),
+                    'Order completed',
+                    'Your order ' .
+                        '<a href="' . route('order.show-order', $order->id) . '" class="text-decoration-none">' . e($order->title) . '</a>' .
+                        ' has been completed. Open the order page for details. Your payment is  $' . ($order->budget - $fee) . '.'
+                );
             });
 
             return redirect()->back()->with('success', 'Order completed successfully!');

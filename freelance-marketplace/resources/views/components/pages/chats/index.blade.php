@@ -7,12 +7,22 @@
             <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark col-3 min-width: 325px">
 
                 <ul class="nav nav-pills flex-column">
+                    @if ($chats->isEmpty())
+                        <li class="nav-item">
+                            <hr>
+                            <span class="nav-link text-white-50 text-center">
+                                No chats yet
+                            </span> 
+                            <hr>
+                        </li>
+                    @endif
+
                     @foreach ($chats as $_chat)
                         <li class="nav-item">
                             <a href="{{ route('chat.show', $_chat) }}"
                                 class="nav-link {{ request()->routeIs('chat.show') && request()->route('chat')->id === $_chat->id ? 'active' : 'text-white' }}">
 
-                                {{ $_chat->order->title }} - {{ $_chat->participant->name }}
+                                {{ $_chat->order->title }} - {{ $_chat->creator_id === auth()->id() ? $_chat->participant->name : $_chat->creator->name }}
 
                                 <br>
 
@@ -51,7 +61,8 @@
 
 <script>
     window.updateUnreadChats = async function() {
-        try {
+        try 
+        {
             const res = await fetch('/chat-statuses/unread-status', {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest'
@@ -66,18 +77,16 @@
 
                 el.classList.toggle('d-none', !data[chatId]);
             }
-
-        } catch (e) {
+        } 
+        catch (e) {
             console.error('Unread update error:', e);
         }
     };
 
     // INIT
-    document.addEventListener('DOMContentLoaded', () => {
-
+    document.addEventListener('DOMContentLoaded', () => 
+    {
         updateUnreadChats();
-
         setInterval(updateUnreadChats, 3000);
-
     });
 </script>

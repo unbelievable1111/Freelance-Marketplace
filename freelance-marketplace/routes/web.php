@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\BankAccountController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\BankAccountController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderApproveController;
 use App\Http\Controllers\OrderCommentController;
 use App\Http\Controllers\OrderController;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,7 @@ Auth::routes();
 
 #HomeController
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
+
 
 #ProfileController
 Route::middleware('auth')->group(function ()
@@ -94,4 +96,11 @@ Route::middleware('auth')->group(function ()
     Route::get('/chat/{chat}/new-messages',         [ChatController::class, 'getNewMessages'])->name('chat.new-messages');
     Route::get('/chat/{chat}/older-messages',       [ChatController::class, 'getOlderMessages'])->name('chat.older-messages');
     Route::get('/chat-statuses/unread-status',      [ChatController::class, 'getUnreadStatus'])->name('chat.unread-status');
+});
+
+#NotificationController
+Route::middleware('auth')->group(function ()
+{
+    Route::get('/notifications',                [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/unread-count',   [NotificationController::class, 'getUnreadCount'])->name('notifications.unread-count');
 });

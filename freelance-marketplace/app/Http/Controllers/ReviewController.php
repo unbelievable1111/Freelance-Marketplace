@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
+use App\Models\NotificationType;
 use App\Models\Order;
 use App\Models\Review;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReviewController extends Controller
 {
@@ -54,14 +58,27 @@ class ReviewController extends Controller
             $targetUserId = $order->customer_id;
         }
 
-        $review = new Review();
-        $review->order_id = $order->id;
-        $review->author_id = auth()->id();
-        $review->target_id = $targetUserId;
-        $review->feedback = $request->input('feedback');
-        $review->score = $request->input('score');
-        $review->save();
+        DB::transaction(function () use ($targetUserId, $order, $request) 
+        {
+            $review = new Review();
+            $review->order_id = $order->id;
+            $review->author_id = auth()->id();
+            $review->target_id = $targetUserId;
+            $review->feedback = $request->input('feedback');
+            $review->score = $request->input('score');
+            $review->save();
 
+            #Notification
+            Notification::createNotification(
+                User::find($targetUserId),
+                NotificationType::getByName('review_received'),
+                'Review received',
+                'You have received a new review for your order ' .
+                    '<a href="' . route('order.show-order', $order->id) . '" class="text-decoration-none">' . e($order->title) . '</a>' .
+                    '. Open the order page for details.'
+            );
+        });
+        
         return redirect()->route('order.show-order', ['order' => $order->id])->with('leave-review-success', 'Your review has been submitted successfully.');
     }
 

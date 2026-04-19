@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
+use App\Models\NotificationType;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -68,6 +71,19 @@ class OrderCommentController extends Controller
                     ]);
                 }
             }
+
+            #Notification
+            $reciever = Auth::id() === $order->customer_id ? User::find($order->executor_id) : User::find($order->customer_id);
+            Notification::createNotification(
+                $reciever,
+                NotificationType::getByName('order_comment_received'),
+                'Order comment received',
+                'You have received a new comment on order ' .
+                    '<a href="' . route('order.show-order', $order->id) . '" class="text-decoration-none">"' . e($order->title) . '"</a>' .
+                    ' from user ' .
+                    '<a href="' . route('public-profile.overview', Auth::id()) . '" class="text-decoration-none">' . e(Auth::user()->name) . '</a>' .
+                    '. Open the <a href="' . route('order.show-order', $order->id) . '" class="text-decoration-none">order</a> to view the comment.'
+            );
 
             DB::commit();
             

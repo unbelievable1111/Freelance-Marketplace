@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Balance;
+use App\Models\Notification;
+use App\Models\NotificationType;
 use App\Models\OrderStatus;
 use App\Models\Transaction;
 use Illuminate\Support\Str;
@@ -18,7 +20,7 @@ use Illuminate\Support\Facades\Auth;
 class OrderApproveController extends Controller
 {
     public function index() {}
-    
+
     // This method validates the incoming request data for approving an order.
     private function validateOrderApproveData(Request $request)
     {
@@ -39,13 +41,13 @@ class OrderApproveController extends Controller
         }
 
         // 1. Base query: Orders approved by current user with status "published"
-        $ordersQuery = Order::whereHas('orderApproves', function($q) {
-                $q->where('user_id', Auth::user()->id);
-            })
-            ->whereHas('status', function($q) {
+        $ordersQuery = Order::whereHas('orderApproves', function ($q) {
+            $q->where('user_id', Auth::user()->id);
+        })
+            ->whereHas('status', function ($q) {
                 $q->where('name', 'published');
             })
-            ->with(['status', 'orderApproves' => function($q) {
+            ->with(['status', 'orderApproves' => function ($q) {
                 $q->where('user_id', Auth::user()->id)->orderBy('created_at', 'desc');
             }]);
 
@@ -73,7 +75,8 @@ class OrderApproveController extends Controller
                     OrderApprove::select('created_at')
                         ->whereColumn('order_id', 'orders.id')
                         ->where('user_id', Auth::user()->id)
-                        ->limit(1), 'asc'
+                        ->limit(1),
+                    'asc'
                 );
                 break;
 
@@ -113,12 +116,12 @@ class OrderApproveController extends Controller
         $orders = $ordersQuery->paginate(10, ['*'], 'p')->withQueryString();
 
         // 6. Check deadlines
-        foreach ($orders as $order) { 
+        foreach ($orders as $order) {
             $order->checkDeadline();
         }
 
         // 7. Get unique subcategories for filters
-        $allOrdersForUser = Order::whereHas('orderApproves', function($q) {
+        $allOrdersForUser = Order::whereHas('orderApproves', function ($q) {
             $q->where('user_id', Auth::user()->id);
         })->get();
         $uniqueSubcategories = SubOrderCategory::getUniqueSubcategoriesFromOrders($allOrdersForUser);
@@ -165,8 +168,7 @@ class OrderApproveController extends Controller
         # 5. If the proposed budget is different from the current order budget, we need to handle the financial transactions accordingly. 
         try {
             DB::transaction(function () use ($order, $orderApproval) {
-                if ($order->budget != $orderApproval->proposed_budget) 
-                {
+                if ($order->budget != $orderApproval->proposed_budget) {
                     $budgetDifference = $orderApproval->proposed_budget - $order->budget;
                     $escrowId = User::where('name', 'escrow_service')->value('id');
 
@@ -178,8 +180,7 @@ class OrderApproveController extends Controller
                         ->lockForUpdate()
                         ->first();
 
-                    if ($budgetDifference > 0) 
-                    {
+                    if ($budgetDifference > 0) {
                         if ($budgetDifference > $user_balance->amount) {
                             throw new \Exception('Insufficient balance to increase the budget by this amount.');
                         }
@@ -209,21 +210,22 @@ class OrderApproveController extends Controller
                         $escrow_service_balance->decrement('amount', abs($budgetDifference));
 
                         Transaction::create(
-                        [
-                            'user_id' => Auth::id(),
-                            'order_id' => $order->id,
-                            'amount' => abs($budgetDifference),
-                            'transaction_type_id' => TransactionType::where('name', 'refund_escrow')->value('id'),
-                            'bank_account_id' => null,
-                            'related_user_id' => User::where('name', 'escrow_service')->value('id'),
-                            'transfer_uuid' => (string)Str::uuid(),
-                            'meta' =>
                             [
-                                'type'        => 'refund_escrow',
-                                'recipient'   => 'escrow_service',
-                                'comment'     => 'Budget decrease for order edit',
-                            ],
-                        ]);
+                                'user_id' => Auth::id(),
+                                'order_id' => $order->id,
+                                'amount' => abs($budgetDifference),
+                                'transaction_type_id' => TransactionType::where('name', 'refund_escrow')->value('id'),
+                                'bank_account_id' => null,
+                                'related_user_id' => User::where('name', 'escrow_service')->value('id'),
+                                'transfer_uuid' => (string)Str::uuid(),
+                                'meta' =>
+                                [
+                                    'type'        => 'refund_escrow',
+                                    'recipient'   => 'escrow_service',
+                                    'comment'     => 'Budget decrease for order edit',
+                                ],
+                            ]
+                        );
                     }
                 }
 
@@ -233,18 +235,24 @@ class OrderApproveController extends Controller
                 $order->deadline_in_days = $orderApproval->proposed_deadline_in_days;
                 $order->deadline_date = now()->addDays($orderApproval->proposed_deadline_in_days);
                 $order->update();
+
+                Notification::createNotification(
+                    User::find($orderApproval->user_id),
+                    NotificationType::getByName('order_approved'),
+                    'Order approved',
+                    'Your proposal for order ' .
+                        '<a href="' . route('order.show-order', $order->id) . '" class="text-decoration-none">' . e($order->title) . '</a>' .
+                        ' has been approved by the customer. Open the order page for details.'
+                );
             });
 
             return redirect()->back()->with('success', 'Proposal submitted successfully.');
-        }
-        catch (\Exception $e) 
-        {
+        } catch (\Exception $e) {
             return redirect()->back()->with('error-order-approve', 'Failed to submit proposal: ' . $e->getMessage());
         }
 
         # 6. Here you would typically handle the submission logic, such as marking the proposal as submitted, notifying the client, etc.
         // For demonstration purposes, we'll just return a success message.
-
         return redirect()->back()->with('success', 'Proposal submitted successfully.');
     }
 
@@ -308,8 +316,7 @@ class OrderApproveController extends Controller
     public function makeApprove(Request $request, Order $order)
     {
         # 1. Check if the user is an executor
-        if (Auth::user()->UserRole->name !== 'executor') 
-        {
+        if (Auth::user()->UserRole->name !== 'executor') {
             return  redirect()->back()->with('error-make-approve', 'Only executors can approve orders.');
         }
 
@@ -317,8 +324,7 @@ class OrderApproveController extends Controller
         $validatedData = $this->validateOrderApproveData($request);
 
         # 3. Check if the order is in a state that can be approved
-        if ($order->status->name !== 'published') 
-        {
+        if ($order->status->name !== 'published') {
             return redirect()->back()->with('error-make-approve', 'Only orders with published status can be approved.');
         }
 
@@ -336,6 +342,19 @@ class OrderApproveController extends Controller
                 'proposed_budget'                   => $validatedData['proposal_budget'],
                 'proposed_deadline_in_days'         => $validatedData['deadline_in_days'],
             ]
+        );
+
+        #Notification
+        $reciever = User::find($order->customer_id);
+        Notification::createNotification(
+            $reciever,
+            NotificationType::getByName('order_proposal_received'),
+            'Order proposal received',
+            'You have received a new proposal on order ' .
+                '<a href="' . route('order.show-order', $order->id) . '" class="text-decoration-none">"' . e($order->title) . '"</a>' .
+                ' from user ' .
+                '<a href="' . route('public-profile.overview', Auth::id()) . '" class="text-decoration-none">' . e(Auth::user()->name) . '</a>' .
+                '. Open the <a href="' . route('order.show-order', $order->id) . '" class="text-decoration-none">order</a> to view the comment.'
         );
 
         return redirect()->back()->with('success', 'Order approve were created successfully.');

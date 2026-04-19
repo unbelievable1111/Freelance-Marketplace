@@ -125,4 +125,9 @@ class User extends Authenticatable
     {
         return $this->Reviews()->exists();
     }
+
+    public function Notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class, 'user_id', 'id');
+    }
 }

@@ -6,6 +6,8 @@ use App\Models\Chat;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\ChatMessage;
+use App\Models\Notification;
+use App\Models\NotificationType;
 
 class ChatController extends Controller
 {
@@ -87,12 +89,24 @@ class ChatController extends Controller
             })
             ->first();
 
-        if (!$chat) {
+        if (!$chat) 
+        {
             $chat = Chat::create([
                 'creator_id'     => auth()->id(),
                 'participant_id' => $receiver->id,
                 'order_id'       => $order->id,
             ]);
+
+            Notification::createNotification(
+                $receiver,
+                NotificationType::getByName('chat_started'),
+                'New chat started',
+                'A new chat has been started regarding order ' .
+                    '<a href="' . route('order.show-order', $order->id) . '" class="text-decoration-none">"' . e($order->title) . '"</a>' .
+                    ' with a user ' .
+                    '<a href="' . route('public-profile.overview', auth()->id()) . '" class="text-decoration-none">' . e(auth()->user()->name) . '</a>' .
+                    '. Open the <a href="' . route('chat.show', $chat->id) . '" class="text-decoration-none">chat</a>.'
+            );
         }
 
         return redirect()->route('chat.show', $chat);
@@ -113,6 +127,23 @@ class ChatController extends Controller
             'message'   => request('message'),
             'is_read'   => false,
         ]);
+
+
+        #Notification
+        $receiverId = $chat->creator_id === auth()->id() ? $chat->participant_id : $chat->creator_id;
+        $receiver = User::find($receiverId);
+        $order = Order::find($chat->order_id);
+        Notification::createNotification(
+                $receiver,
+                NotificationType::getByName('chat_message_received'),
+                'New chat message',
+                'You have a new message in the chat regarding order ' .
+                    '<a href="' . route('order.show-order', $order->id) . '" class="text-decoration-none">"' . e($order->title) . '"</a>' .
+                    ' with a user ' .
+                    '<a href="' . route('public-profile.overview', auth()->id()) . '" class="text-decoration-none">' . e(auth()->user()->name) . '</a>' .
+                    '. Open the <a href="' . route('chat.show', $chat->id) . '" class="text-decoration-none">chat</a>.'
+            );
+
 
         return view('components.pages.chats.message', compact('message'));
     }
