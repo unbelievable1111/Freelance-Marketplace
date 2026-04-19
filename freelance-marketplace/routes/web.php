@@ -18,7 +18,9 @@ Auth::routes();
 
 #HomeController
 Route::get('/', [HomeController::class, 'index'])->name('home.index');
-
+Route::get('/pricing', [HomeController::class, 'pricing'])->name('home.pricing');
+Route::get('/features', [HomeController::class, 'features'])->name('home.features');
+Route::get('/faq', [HomeController::class, 'faq'])->name('home.faq');
 
 #ProfileController
 Route::middleware('auth')->group(function ()

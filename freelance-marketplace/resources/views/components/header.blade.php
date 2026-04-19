@@ -64,9 +64,9 @@
 
         @endauth
 
-        <li><a href="#" class="nav-link px-2 py-1">Pricing</a></li>
-        <li><a href="#" class="nav-link px-2 py-1">Features</a></li>
-        <li><a href="#" class="nav-link px-2 py-1">FAQs</a></li>
+        <li><a href="{{ route('home.pricing') }}" class="nav-link px-2 py-1 {{ request()->routeIs('home.pricing') ? 'link-secondary' : '' }}">Pricing</a></li>
+        <li><a href="{{ route('home.features') }}" class="nav-link px-2 py-1 {{ request()->routeIs('home.features') ? 'link-secondary' : '' }}">Features</a></li>
+        <li><a href="{{ route('home.faq') }}" class="nav-link px-2 py-1 {{ request()->routeIs('home.faq') ? 'link-secondary' : '' }}">FAQs</a></li>
 
         @auth
             <li>

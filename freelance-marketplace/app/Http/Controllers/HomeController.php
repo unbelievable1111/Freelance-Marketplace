@@ -88,4 +88,19 @@ class HomeController extends Controller
             )
         );
     }
+
+    public function pricing()
+    {
+        return view('components.pages.home.pricing');
+    }
+
+    public function features()
+    {
+        return view('components.pages.home.features');
+    }
+
+    public function faq()
+    {
+        return view('components.pages.home.faq');
+    }
 }
