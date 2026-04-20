@@ -121,6 +121,11 @@ class User extends Authenticatable
         return $this->UserRole->name === 'customer';
     }
 
+    public function isAdmin()
+    {
+        return $this->UserRole->name === 'admin';
+    }
+
     public function hasReviews()
     {
         return $this->Reviews()->exists();

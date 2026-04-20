@@ -20,6 +20,15 @@
         </li>
 
         @auth
+            @if (auth()->user()->isAdmin())
+                <li>
+                    <a href="{{ route('report.index') }}"
+                        class="nav-link px-2 py-1 {{ request()->routeIs('report.index') ? 'link-secondary' : '' }}">
+                        Reports
+                    </a>
+                </li>
+            @endif
+
             @if (in_array(auth()->user()->UserRole->name, ['customer', 'executor']))
                 <li>
                     <a href="{{ route('order.show-orders') }}"

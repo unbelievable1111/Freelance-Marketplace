@@ -82,14 +82,15 @@
                 <span class="badge bg-primary p-2">{{ $order->subCategory->mainOrderCategory->name }} -
                     {{ $order->subCategory->name }}</span>
 
-                <span class="badge bg-success p-2">{{ $order->budget }} USD </span>
+                <span class="badge bg-success p-2">{{ $order->budget }} USD</span>
 
                 <span class="badge bg-warning text-dark p-2">{{ $order->deadline_in_days }}
                     day(s)
                 </span>
 
                 <span class="badge bg-light text-dark p-2">
-                    <a href="{{ route('public-profile.overview', $order->customer) }}" class="text-decoration-none text-dark">
+                    <a href="{{ route('public-profile.overview', $order->customer) }}"
+                        class="text-decoration-none text-dark">
                         {{ $order->customer->name }}
                     </a>
                 </span>
@@ -102,6 +103,12 @@
                         </span>
                     @endfor
                 </div>
+
+                <span class="badge bg-danger text-dark p-2">
+                    <a href="{{ route('report.create', $order) }}" class="text-decoration-none text-dark">
+                        Make a report
+                    </a>
+                </span>
             </div>
 
             @if (url()->previous() !== url()->current())
@@ -110,6 +117,10 @@
                 </a>
             @endif
         </div>
+
+        @if (session('success'))
+            <div class="alert alert-success mt-3">{{ session('success') }}</div>
+        @endif
 
         @if ($order->executor && $order->userBelongsToOrder())
             @include('components.pages.orders.progress-card')
@@ -128,6 +139,8 @@
         @if ($order->isCompleted() && $order->userBelongsToOrder())
             @include('components.pages.orders.review-card')
         @endif
+
+
 
         @if (session('error'))
             <div class="alert alert-danger mt-4">

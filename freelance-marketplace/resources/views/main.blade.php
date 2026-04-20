@@ -31,11 +31,6 @@
         <div class="container">
             @include('components.header')
             
-            @if (session('success'))
-                <div class="alert alert-success">{{ session('success') }}</div>
-            @endif
-
-
             @guest
                 <div class="container">
                     <h1>Hello, guest</h1>

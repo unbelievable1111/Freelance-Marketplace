@@ -9,6 +9,7 @@ use App\Http\Controllers\OrderCommentController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -103,6 +104,17 @@ Route::middleware('auth')->group(function ()
 #NotificationController
 Route::middleware('auth')->group(function ()
 {
-    Route::get('/notifications',                [NotificationController::class, 'index'])->name('notifications.index');
-    Route::get('/notifications/unread-count',   [NotificationController::class, 'getUnreadCount'])->name('notifications.unread-count');
+    Route::get('/notifications',                    [NotificationController::class, 'index'])->name('notifications.index');
+    Route::get('/notifications/unread-count',       [NotificationController::class, 'getUnreadCount'])->name('notifications.unread-count');
+});
+
+#ReportController
+Route::middleware('auth')->group(function ()
+{
+    Route::get('/reports',                              [ReportController::class, 'index'])->name('report.index');
+    Route::get('/reports/create/{order}',               [ReportController::class, 'create'])->name('report.create');
+    Route::post('/reports/create/{order}',              [ReportController::class, 'store'])->name('report.store');
+    Route::get('/reports/show/{report}',                [ReportController::class, 'show'])->name('report.show');
+    Route::post('/reports/{report}/comments',           [ReportController::class, 'storeComment'])->name('report.comment.store');
+    Route::patch('/reports/{report}/complete',          [ReportController::class, 'complete'])->name('report.complete');
 });

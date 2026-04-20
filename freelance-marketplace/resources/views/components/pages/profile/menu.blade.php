@@ -10,7 +10,7 @@
                         height="32" role="img" aria-label="Bootstrap">
                     <span class="fs-4">My profile</span>
                 </a>
-                
+
                 <hr>
 
                 <ul class="nav nav-pills flex-column">
@@ -49,22 +49,16 @@
                         </a>
                     </li>
 
-                    {{-- 
+                    @if(auth()->user()->isExecutor() || auth()->user()->isCustomer())
                         <li class="nav-item">
-                            <a href="{{ route('profile.transactions') }}"
-                            class="nav-link {{ request()->routeIs('profile.transactions') ? 'active' : 'text-white' }}">
-                                Transaction history
+                            <a href="{{ route('report.index') }}"
+                                class="nav-link {{ request()->routeIs('report.index') ? 'active' : 'text-white' }}">
+                                Reports
                             </a>
                         </li>
-
-                        <li class="nav-item">
-                            <a href="{{ route('profile.reviews') }}"
-                            class="nav-link {{ request()->routeIs('profile.reviews') ? 'active' : 'text-white' }}">
-                                Reviews
-                            </a>
-                        </li> 
-                    --}}
+                    @endif
                 </ul>
+                
                 <hr>
             </div>
             <div class="col-9 p-0">

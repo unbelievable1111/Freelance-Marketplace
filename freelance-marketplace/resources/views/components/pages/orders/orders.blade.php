@@ -198,16 +198,14 @@
 
                                     <div class="badge bg-light text-dark p-2">
                                         @for ($i = 0; $i < 5; $i++)
-                                            <span
-                                                class="{{ $i < (int) $order->customer->getAverageRatingAttribute() ? 'text-warning' : 'text-secondary' }}">
+                                            <span class="{{ $i < (int) $order->customer->getAverageRatingAttribute() ? 'text-warning' : 'text-secondary' }}">
                                                 ★
                                             </span>
                                         @endfor
                                     </div>
                                 </div>
 
-                                <a href="{{ route('order.show-order', $order) }}"
-                                    class="btn btn-info btn-sm pl-2 pr-2 text">View Details →</a>
+                                <a href="{{ route('order.show-order', $order) }}" class="btn btn-info btn-sm pl-2 pr-2 text">View Details →</a>
                             </div>
                         </div>
                     @endforeach

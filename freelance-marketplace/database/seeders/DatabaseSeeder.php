@@ -98,5 +98,8 @@ class DatabaseSeeder extends Seeder
         $this->call(OrderApproveSeeder::class);
         $this->call(NotificationTypeSeeder::class);
         $this->call(NotificationSeeder::class);
-    }
+        $this->call(ReportStatusSeeder::class);
+        $this->call(ReportSeeder::class);
+        $this->call(ReportCommentSeeder::class);
+        }
 }
