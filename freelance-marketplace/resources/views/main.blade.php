@@ -31,12 +31,6 @@
         <div class="container">
             @include('components.header')
             
-            @guest
-                <div class="container">
-                    <h1>Hello, guest</h1>
-                </div>
-            @endguest
-
             <main>
                 @yield('content')
             </main>

@@ -15,7 +15,7 @@
         <li>
             <a href="{{ route('home.index') }}"
                 class="nav-link px-2 py-1 {{ request()->routeIs('home.index') ? 'link-secondary' : '' }}">
-                Home
+                Orders
             </a>
         </li>
 

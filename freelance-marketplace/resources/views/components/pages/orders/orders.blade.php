@@ -138,10 +138,20 @@
             <div class="col-12">
                 {{-- Orders List --}}
                 @if ($orders_total_count === 0)
-                    <div class="alert alert-info text-center">
-                        You have no orders yet. <a href="{{ route('order.create-order') }}" class="alert-link">Create your
-                            first order</a>.
-                    </div>
+
+                    @if (auth()->user()->isCustomer())
+                        <div class="alert alert-info text-center">
+                            You have no orders yet. <a href="{{ route('order.create-order') }}" class="alert-link">Create your
+                                first order</a>.
+                        </div>
+                    @endif
+
+                    @if (auth()->user()->isExecutor())
+                        <div class="alert alert-info text-center">
+                            You have no orders yet. Browse available orders on the <a href="{{ route('home.index') }}" class="alert-link">orders page</a>.
+                        </div>
+                    @endif
+                    
                 @else
                     @if (count($orders) === 0)
                         <div class="alert alert-info text-center">No orders found on this page.</div>
